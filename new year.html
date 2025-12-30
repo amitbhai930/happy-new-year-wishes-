@@ -6,106 +6,86 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, sans-serif;
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+
+body{
+  height:100vh;
+  background:radial-gradient(circle at top,#240046,#000);
+  overflow:hidden;
+  color:#fff;
+  text-align:center;
 }
 
-body {
-  height: 100vh;
-  background: radial-gradient(circle at top, #240046, #000);
-  overflow: hidden;
-  color: #fff;
-  text-align: center;
+body.shake{
+  animation:shake 0.6s ease-in-out;
 }
 
-.container {
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 20px;
+@keyframes shake{
+  0%{transform:translate(0)}
+  20%{transform:translate(-10px,5px)}
+  40%{transform:translate(10px,-5px)}
+  60%{transform:translate(-8px,4px)}
+  80%{transform:translate(8px,-4px)}
+  100%{transform:translate(0)}
 }
 
-.avatar {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 4px solid #00ffff;
-  box-shadow: 0 0 25px #00ffff;
-  margin-bottom: 15px;
+.container{
+  position:relative;
+  top:50%;
+  transform:translateY(-50%);
+  padding:20px;
 }
 
-h1 {
-  font-size: 3rem;
-  animation: glow 2s infinite alternate;
+/* 📸 AUTO-CROP PHOTO */
+.avatar{
+  width:130px;
+  height:130px;
+  border-radius:50%;
+  object-fit:cover;
+  object-position:center;
+  border:4px solid #00ffff;
+  box-shadow:0 0 30px #00ffff;
+  margin-bottom:15px;
 }
 
-h2 {
-  margin-top: 8px;
-  color: #ffd700;
+h1{
+  font-size:3rem;
+  animation:glow 2s infinite alternate;
 }
 
-.name {
-  margin-top: 8px;
-  font-size: 1.4rem;
-  color: #00ffff;
-}
+h2{margin-top:8px;color:#ffd700}
+.name{margin-top:8px;font-size:1.4rem;color:#00ffff}
+.countdown{margin-top:18px;font-size:1.4rem}
+.tap{margin-top:15px;opacity:.8}
 
-.countdown {
-  margin-top: 18px;
-  font-size: 1.4rem;
-}
-
-.tap {
-  margin-top: 20px;
-  font-size: 1rem;
-  opacity: 0.8;
-}
-
-@keyframes glow {
-  from { text-shadow: 0 0 10px #ff00ff; }
-  to { text-shadow: 0 0 35px #00ffff; }
-}
-
-/* Confetti */
-.confetti {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  animation: fall linear infinite;
-}
-
-@keyframes fall {
-  from { transform: translateY(-10px) rotate(0); opacity: 1; }
-  to { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+@keyframes glow{
+  from{text-shadow:0 0 10px #ff00ff}
+  to{text-shadow:0 0 35px #00ffff}
 }
 
 /* Fireworks */
-.firework {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  animation: explode 1.8s ease-out forwards;
+.firework{
+  position:absolute;
+  width:4px;
+  height:4px;
+  border-radius:50%;
+  animation:explode 1.6s ease-out forwards;
 }
 
-@keyframes explode {
-  from { transform: scale(1); opacity: 1; }
-  to {
-    transform: translate(var(--x), var(--y)) scale(0);
-    opacity: 0;
+@keyframes explode{
+  from{transform:scale(1);opacity:1}
+  to{
+    transform:translate(var(--x),var(--y)) scale(0);
+    opacity:0
   }
 }
 
-footer {
-  position: absolute;
-  bottom: 15px;
-  width: 100%;
-  font-size: 0.9rem;
-  opacity: 0.6;
+footer{
+  position:absolute;
+  bottom:15px;
+  width:100%;
+  font-size:.9rem;
+  opacity:.6;
 }
 </style>
 </head>
@@ -113,130 +93,122 @@ footer {
 <body>
 
 <div class="container">
-  <!-- YOUR PHOTO / LOGO -->
-  <img src="" id="avatar" class="avatar" alt="Amit Rana">
-
+  <img src="profile.jpg" class="avatar" alt="Amit Rana">
   <h1>🎉 Happy New Year 2026 🎉</h1>
-  <h2>Wishing You Success & Happiness</h2>
+  <h2>Success • Health • Happiness</h2>
   <div class="name">✨ From Amit Rana ✨</div>
-
   <div class="countdown" id="countdown">Loading...</div>
-  <div class="tap">👆 Tap anywhere to start music</div>
+  <div class="tap">👆 Tap anywhere to start</div>
 </div>
 
-<footer>
-  Let’s Welcome 2026 With a Beat Drop 🎧🎆
-</footer>
+<footer>DJ Beat • Bass Fireworks • Midnight Blast 🎧🎆</footer>
 
-<!-- MUSIC TRACKS -->
-<audio id="bgMusic" loop>
-  <!-- Pre-midnight groove -->
+<!-- MUSIC -->
+<audio id="music" crossorigin="anonymous">
   <source src="https://cdn.pixabay.com/download/audio/2023/03/28/audio_9c1d6f87d5.mp3" type="audio/mpeg">
-</audio>
-
-<audio id="dropMusic">
-  <!-- DJ BEAT DROP -->
-  <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_94c56e7b2f.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 /* ======================
-   LOAD YOUR PHOTO
+   AUDIO + BASS ANALYSIS
 ====================== */
-// Use the uploaded image automatically if available
-// Fallback: user can still edit src manually
-document.getElementById("avatar").src =
-  document.querySelector("img").src || "";
+const audio = document.getElementById("music");
+const ctx = new (window.AudioContext||window.webkitAudioContext)();
+const source = ctx.createMediaElementSource(audio);
+const analyser = ctx.createAnalyser();
+source.connect(analyser);
+analyser.connect(ctx.destination);
+analyser.fftSize = 256;
+const data = new Uint8Array(analyser.frequencyBinCount);
 
-/* ======================
-   AUDIO CONTROL
-====================== */
-const bgMusic = document.getElementById("bgMusic");
-const dropMusic = document.getElementById("dropMusic");
+let started=false, dropped=false;
 
-let musicStarted = false;
-let dropped = false;
-
-// Auto-start music on FIRST TAP (WhatsApp compatible)
-document.body.addEventListener("click", () => {
-  if (!musicStarted) {
-    bgMusic.play();
-    musicStarted = true;
+// Start on first tap (WhatsApp-safe)
+document.body.addEventListener("click",()=>{
+  if(!started){
+    ctx.resume();
+    audio.play();
+    started=true;
+    bassFireworks();
   }
-}, { once: true });
+},{once:true});
 
 /* ======================
    COUNTDOWN
 ====================== */
-const countdownEl = document.getElementById("countdown");
-const newYear = new Date("January 1, 2026 00:00:00").getTime();
+const countdown=document.getElementById("countdown");
+const newYear=new Date("January 1, 2026 00:00:00").getTime();
 
-setInterval(() => {
-  const now = Date.now();
-  const diff = newYear - now;
+setInterval(()=>{
+  const now=Date.now();
+  const diff=newYear-now;
 
-  if (diff <= 0 && !dropped) {
-    countdownEl.innerHTML = "🎆 WELCOME 2026 🎆";
-    midnightExplosion();
-    dropped = true;
+  if(diff<=0 && !dropped){
+    countdown.innerHTML="🎆 WELCOME 2026 🎆";
+    midnightDrop();
+    dropped=true;
     return;
   }
 
-  const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-  const m = Math.floor((diff / (1000 * 60)) % 60);
-  const s = Math.floor((diff / 1000) % 60);
+  const d=Math.floor(diff/(1000*60*60*24));
+  const h=Math.floor((diff/(1000*60*60))%24);
+  const m=Math.floor((diff/(1000*60))%60);
+  const s=Math.floor((diff/1000)%60);
 
-  countdownEl.innerHTML = `⏳ ${d}d ${h}h ${m}m ${s}s`;
-}, 1000);
+  countdown.innerHTML=`⏳ ${d}d ${h}h ${m}m ${s}s`;
+},1000);
 
 /* ======================
-   EFFECTS
+   🔊 BASS-SYNCED FIREWORKS
 ====================== */
-setInterval(() => {
-  const c = document.createElement("div");
-  c.className = "confetti";
-  c.style.left = Math.random() * window.innerWidth + "px";
-  c.style.backgroundColor = `hsl(${Math.random()*360},100%,50%)`;
-  c.style.animationDuration = Math.random()*3 + 2 + "s";
-  document.body.appendChild(c);
-  setTimeout(() => c.remove(), 5000);
-}, 100);
+function bassFireworks(){
+  requestAnimationFrame(bassFireworks);
+  analyser.getByteFrequencyData(data);
+  const bass=data[1]+data[2]+data[3];
 
-function explodeAt(x, y, count) {
-  for (let i = 0; i < count; i++) {
-    const f = document.createElement("div");
-    f.className = "firework";
-    f.style.left = x + "px";
-    f.style.top = y + "px";
-    f.style.backgroundColor = `hsl(${Math.random()*360},100%,60%)`;
-
-    const angle = Math.random() * Math.PI * 2;
-    const dist = Math.random() * 220 + 50;
-    f.style.setProperty("--x", Math.cos(angle) * dist + "px");
-    f.style.setProperty("--y", Math.sin(angle) * dist + "px");
-
-    document.body.appendChild(f);
-    setTimeout(() => f.remove(), 1800);
+  if(bass>420){
+    explode(
+      Math.random()*innerWidth,
+      Math.random()*innerHeight/2,
+      35
+    );
   }
 }
 
 /* ======================
-   MIDNIGHT EXPLOSION + DJ DROP
+   FIREWORK ENGINE
 ====================== */
-function midnightExplosion() {
-  bgMusic.pause();
-  dropMusic.currentTime = 0;
-  dropMusic.play(); // 🎧 BEAT DROP
+function explode(x,y,count){
+  for(let i=0;i<count;i++){
+    const f=document.createElement("div");
+    f.className="firework";
+    f.style.left=x+"px";
+    f.style.top=y+"px";
+    f.style.backgroundColor=`hsl(${Math.random()*360},100%,60%)`;
+    const a=Math.random()*Math.PI*2;
+    const d=Math.random()*220+40;
+    f.style.setProperty("--x",Math.cos(a)*d+"px");
+    f.style.setProperty("--y",Math.sin(a)*d+"px");
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),1600);
+  }
+}
 
-  for (let i = 0; i < 12; i++) {
-    setTimeout(() => {
-      explodeAt(
-        Math.random() * window.innerWidth,
-        Math.random() * window.innerHeight / 2,
+/* ======================
+   🧨 MIDNIGHT BEAT DROP
+====================== */
+function midnightDrop(){
+  document.body.classList.add("shake");
+  setTimeout(()=>document.body.classList.remove("shake"),600);
+
+  for(let i=0;i<10;i++){
+    setTimeout(()=>{
+      explode(
+        Math.random()*innerWidth,
+        Math.random()*innerHeight/2,
         90
       );
-    }, i * 250);
+    },i*200);
   }
 }
 </script>
