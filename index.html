@@ -1,27 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
 <meta charset="UTF-8">
-<title>Happy New Year 2026 🎆</title>
+<title>नववर्ष 2026 – Amit Rana 🎉</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- ======================
-     WHATSAPP PREVIEW META
-====================== -->
-<meta property="og:title" content="🎉 Happy New Year 2026 🎉">
-<meta property="og:description" content="Tap to see your New Year wishes with music, fireworks & surprises ✨">
-<meta property="og:image" content="https://YOUR-USERNAME.github.io/new-year-2026/preview.jpg">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://amitbhai930.github.io/new-year-2026/">
-
-<meta name="twitter:card" content="summary_large_image">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
 
 body{
   height:100vh;
-  background:radial-gradient(circle at top,#240046,#000);
+  background:radial-gradient(circle at top,#180030,#000);
   overflow:hidden;
   color:#fff;
   text-align:center;
@@ -35,8 +24,13 @@ body{
 }
 
 h1{
-  font-size:2.8rem;
+  font-size:3rem;
   animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+  from{text-shadow:0 0 10px #ff00ff}
+  to{text-shadow:0 0 40px #00ffff}
 }
 
 .name{
@@ -46,35 +40,32 @@ h1{
 }
 
 .message{
-  margin-top:15px;
-  font-size:1.3rem;
+  margin-top:18px;
+  font-size:1.1rem;
+  line-height:1.8;
   color:#ffd700;
+  max-width:900px;
+  margin:auto;
 }
 
-.image-box{
-  margin:20px auto;
-  width:260px;
-  height:160px;
-  border-radius:15px;
-  background-size:cover;
-  background-position:center;
-  box-shadow:0 0 30px #00ffff;
-}
-
-.countdown{
+.controls{
   margin-top:20px;
-  font-size:1.2rem;
+}
+
+button{
+  padding:12px 22px;
+  margin:8px;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  background:linear-gradient(45deg,#ff00ff,#00ffff);
+  color:#000;
+  font-weight:bold;
 }
 
 .tap{
-  margin-top:15px;
-  opacity:.7;
-  font-size:.95rem;
-}
-
-@keyframes glow{
-  from{text-shadow:0 0 10px #ff00ff}
-  to{text-shadow:0 0 35px #00ffff}
+  margin-top:10px;
+  opacity:.75;
 }
 
 /* Fireworks */
@@ -83,7 +74,7 @@ h1{
   width:4px;
   height:4px;
   border-radius:50%;
-  animation:explode 1.6s ease-out forwards;
+  animation:explode 1.5s ease-out forwards;
 }
 
 @keyframes explode{
@@ -92,6 +83,21 @@ h1{
     transform:translate(var(--x),var(--y)) scale(0);
     opacity:0
   }
+}
+
+/* Sparkles */
+.sparkle{
+  position:absolute;
+  width:6px;
+  height:6px;
+  background:gold;
+  border-radius:50%;
+  animation:sparkle 4s linear infinite;
+}
+
+@keyframes sparkle{
+  from{transform:translateY(100vh);opacity:1}
+  to{transform:translateY(-10vh);opacity:0}
 }
 
 footer{
@@ -107,109 +113,72 @@ footer{
 <body>
 
 <div class="container">
-  <h1>🎉 Happy New Year 2026 🎉</h1>
-  <div class="name" id="nameText"></div>
+  <h1>🎉 नववर्ष 2026 🎉</h1>
+  <div class="name">✨ Amit Rana ✨</div>
 
-  <div class="image-box" id="randomImage"></div>
+  <div class="message" id="wishText"></div>
 
-  <div class="message" id="randomMessage"></div>
+  <div class="controls">
+    <button onclick="toggleMale()">🎙️ Male Voice</button>
+    <button onclick="shareWhatsApp()">📲 WhatsApp Share</button>
+  </div>
 
-  <div class="countdown" id="countdown">Loading...</div>
-  <div class="tap">🎧 Music plays automatically</div>
+  <div class="tap">🔊 पहली बार टैप करने पर पूरा संदेश DJ प्रभाव के साथ सुना जाएगा</div>
 </div>
 
-<footer>Wishing You a Bright New Year ✨</footer>
+<footer>DJ Beat • Echo Voice • Fireworks 🎧🎆</footer>
 
-<!-- MUSIC -->
-<audio id="music" autoplay muted loop>
-  <source src="https://cdn.pixabay.com/download/audio/2023/03/28/audio_9c1d6f87d5.mp3" type="audio/mpeg">
+<!-- 🎧 DJ REMIX INSTRUMENTAL -->
+<audio id="music" autoplay muted loop crossorigin="anonymous">
+  <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_94c56e7b2f.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 /* ======================
-   🎁 NAME VIA URL
+   HINDI PARAGRAPH WISH
 ====================== */
-const params = new URLSearchParams(window.location.search);
-const name = params.get("name") || "Dear Friend";
-document.getElementById("nameText").innerText = `✨ ${name} ✨`;
+const wishes=[
+`नया साल 2026 आपके जीवन में नई शुरुआत, नई ऊर्जा और नई सफलताएँ लेकर आए।
+ईश्वर करे कि यह वर्ष आपके लिए स्वास्थ्य, शांति, प्रेम और समृद्धि से भरा हो।
+आपकी मेहनत सफल हो और आपके सपने साकार हों।
+नववर्ष की हार्दिक शुभकामनाएँ।`,
 
-/* ======================
-   🌍 LANGUAGE DETECTION
-====================== */
-const lang = navigator.language || "en";
-
-/* ======================
-   RANDOM IMAGES
-====================== */
-const images = [
-  "https://images.unsplash.com/photo-1513151233558-d860c5398176",
-  "https://images.unsplash.com/photo-1482517967863-00e15c9b44be",
-  "https://images.unsplash.com/photo-1546272989-40c92939c6c2",
-  "https://images.unsplash.com/photo-1481819167214-0427aac02394"
+`नववर्ष 2026 आपके जीवन को खुशियों और उपलब्धियों से भर दे।
+हर दिन नई उम्मीद और हर रात सुकून लेकर आए।
+आपका जीवन सफलता और सम्मान से चमकता रहे।
+नए साल की ढेरों शुभकामनाएँ।`
 ];
 
-document.getElementById("randomImage").style.backgroundImage =
-  `url(${images[Math.floor(Math.random()*images.length)]})`;
+const wishText=wishes[Math.floor(Math.random()*wishes.length)];
+document.getElementById("wishText").innerText=wishText;
 
 /* ======================
-   🎉 WISHES (HI / EN)
+   🎧 AUDIO CONTEXT + BASS
 ====================== */
-const wishesEN = [
-  "May 2026 bring you happiness, success & peace ✨",
-  "New Year, New Dreams, New Opportunities 🎆",
-  "Wishing you health, wealth & smiles in 2026 💫",
-  "Cheers to fresh starts and beautiful moments 🥂"
-];
-
-const wishesHI = [
-  "नया साल आपके जीवन में खुशियाँ और सफलता लाए ✨",
-  "2026 आपके लिए नई उम्मीदें लेकर आए 🎆",
-  "आपका नया साल मंगलमय हो 💫",
-  "खुशियों और तरक्की से भरा नया साल 🥂"
-];
-
-const wishes = lang.startsWith("hi") ? wishesHI : wishesEN;
-document.getElementById("randomMessage").innerText =
-  wishes[Math.floor(Math.random()*wishes.length)];
+const music=document.getElementById("music");
+const ctx=new (window.AudioContext||window.webkitAudioContext)();
+const src=ctx.createMediaElementSource(music);
+const analyser=ctx.createAnalyser();
+src.connect(analyser);
+analyser.connect(ctx.destination);
+analyser.fftSize=256;
+const data=new Uint8Array(analyser.frequencyBinCount);
 
 /* ======================
-   COUNTDOWN
+   🎆 BASS SYNC FIREWORKS
 ====================== */
-const countdown = document.getElementById("countdown");
-const newYear = new Date("January 1, 2026 00:00:00").getTime();
-
-setInterval(()=>{
-  const now = Date.now();
-  const diff = newYear - now;
-
-  if(diff <= 0){
-    countdown.innerHTML = "🎆 Welcome 2026 🎆";
-    midnightFireworks();
-    return;
+function bassFireworks(){
+  requestAnimationFrame(bassFireworks);
+  analyser.getByteFrequencyData(data);
+  const bass=data[1]+data[2]+data[3];
+  if(bass>420){
+    explode(Math.random()*innerWidth,Math.random()*innerHeight/2,30);
   }
-
-  const d = Math.floor(diff/(1000*60*60*24));
-  const h = Math.floor((diff/(1000*60*60))%24);
-  const m = Math.floor((diff/(1000*60))%60);
-  const s = Math.floor((diff/1000)%60);
-
-  countdown.innerHTML = `⏳ ${d}d ${h}h ${m}m ${s}s`;
-},1000);
-
-/* ======================
-   AUTO UNMUTE
-====================== */
-const music = document.getElementById("music");
-function enableSound(){
-  music.muted = false;
-  music.play();
 }
-["click","touchstart","scroll"].forEach(e=>{
-  document.addEventListener(e, enableSound, { once:true });
-});
+bassFireworks();
 
 /* ======================
-   FIREWORKS
+   FIREWORK ENGINE
 ====================== */
 function explode(x,y,count){
   for(let i=0;i<count;i++){
@@ -219,24 +188,72 @@ function explode(x,y,count){
     f.style.top=y+"px";
     f.style.backgroundColor=`hsl(${Math.random()*360},100%,60%)`;
     const a=Math.random()*Math.PI*2;
-    const d=Math.random()*200+40;
+    const d=Math.random()*220+40;
     f.style.setProperty("--x",Math.cos(a)*d+"px");
     f.style.setProperty("--y",Math.sin(a)*d+"px");
     document.body.appendChild(f);
-    setTimeout(()=>f.remove(),1600);
+    setTimeout(()=>f.remove(),1500);
   }
 }
 
-function midnightFireworks(){
-  for(let i=0;i<10;i++){
-    setTimeout(()=>{
-      explode(
-        Math.random()*innerWidth,
-        Math.random()*innerHeight/2,
-        80
-      );
-    },i*200);
+/* ======================
+   🎙️ VOICE + ECHO EFFECT
+====================== */
+let male=true;
+
+function toggleMale(){
+  male=!male;
+  alert(male?"Male voice ON":"Default voice ON");
+}
+
+function speakWish(){
+  music.muted=false;
+  music.volume=0.25;
+
+  const utter=new SpeechSynthesisUtterance(wishText);
+  utter.lang="hi-IN";
+  utter.rate=0.9;
+
+  const voices=speechSynthesis.getVoices();
+  if(male){
+    const mv=voices.find(v=>v.lang==="hi-IN" && v.name.toLowerCase().includes("male"));
+    if(mv) utter.voice=mv;
   }
+
+  utter.onstart=()=>music.volume=0.12;
+  utter.onend=()=>music.volume=0.35;
+
+  speechSynthesis.speak(utter);
+}
+
+document.body.addEventListener("click",()=>{
+  ctx.resume();
+  speakWish();
+},{once:true});
+
+/* ======================
+   ✨ SPARKLES
+====================== */
+setInterval(()=>{
+  const s=document.createElement("div");
+  s.className="sparkle";
+  s.style.left=Math.random()*innerWidth+"px";
+  s.style.animationDuration=Math.random()*3+3+"s";
+  document.body.appendChild(s);
+  setTimeout(()=>s.remove(),5000);
+},160);
+
+/* ======================
+   📲 WHATSAPP SHARE
+====================== */
+function shareWhatsApp(){
+  const text=encodeURIComponent(
+`🎉 नववर्ष 2026 की शुभकामनाएँ 🎉
+Amit Rana की ओर से विशेष संदेश 🎧🎆
+यह लिंक खोलें:
+${location.href}`
+  );
+  window.open(`https://wa.me/?text=${text}`,"_blank");
 }
 </script>
 
