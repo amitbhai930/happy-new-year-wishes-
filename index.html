@@ -258,11 +258,35 @@ document.getElementById("start").onclick=()=>{
 
   bassLoop();
 
-  const u=new SpeechSynthesisUtterance(shDiv.innerText);
-  u.lang="hi-IN";
-  speechSynthesis.speak(u);
-};
+function speakText(text){
+  if(isSpeaking) return; // prevent interruption
 
+  isSpeaking = true;
+  speechSynthesis.cancel();
+
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "hi-IN";
+  u.rate = 0.85;   // slower = more stable
+  u.pitch = 0.9;
+
+  // keep music audible
+  u.onstart = () => {
+    music.volume = 0.35;
+  };
+
+  u.onend = () => {
+    isSpeaking = false;
+    music.volume = 0.6; /  restore music
+  };
+
+  u.onerror = () => {
+    isSpeaking = false;
+  };
+
+  speechSynthesis.speak(u);
+}
+;
+let isSpeaking = false;
   const bgMusic = document.getElementById("bgMusic");
 
 /* Smooth fade-in */
