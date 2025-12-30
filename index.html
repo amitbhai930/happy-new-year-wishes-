@@ -110,7 +110,7 @@ h1{font-size:3rem;color:#ffd700}
   <h1>🎉 Happy New Year 2026 🎉</h1>
   <div class="name">✨ Amit Rana ✨</div>
   <div id="slider"></div>
-  <div id="shayari"></div>
+  <div id="shayari" class="animated-text"></div>
 </div>
 
 <audio id="music" loop muted playsinline>
@@ -143,19 +143,34 @@ const shayariList=[
 "हर सुबह नई उम्मीद लाए,\nनया साल आपके जीवन में उजाला लाए।",
 "हँसी, खुशी और प्यार,\nनया साल लाए खुशियों की बहार।"
 ];
+// ⌨️ TYPEWRITER EFFECT
+function typeWriter(element, text, speed = 40){
+  element.innerHTML = "";
+  element.classList.remove("slide-in");
+
+  let i = 0;
+  const timer = setInterval(()=>{
+    element.innerHTML += text.charAt(i);
+    i++;
+    if(i >= text.length){
+      clearInterval(timer);
+      element.classList.add("slide-in");
+    }
+  }, speed);
+}
 
 let shIndex=0;
 const shDiv=document.getElementById("shayari");
 function changeShayari(){
-  shDiv.style.opacity=0;
-  setTimeout(()=>{
-    shDiv.innerText=shayariList[shIndex];
-    shDiv.style.opacity=1;
-    shIndex=(shIndex+1)%shayariList.length;
-  },400);
+  const text = shayariList[shIndex];
+  typeWriter(shDiv, text);
+  shIndex = (shIndex + 1) % shayariList.length;
 }
-changeShayari();
-setInterval(changeShayari,5000);
+#shayari, .message{
+  font-family:'Kalam', cursive;
+  letter-spacing:0.5px;
+}
+
 
 /* ---------------- FIREWORKS ---------------- */
 function explode(){
@@ -180,6 +195,7 @@ function bassLoop(){
   analyser.getByteFrequencyData(data);
   const bass=data[1]+data[2]+data[3];
   if(bass>480) explode();
+  shakeText(); // 🕺 text shakes on bass hit
 }
 
 /* ---------------- START (ONE TAP ONLY) ---------------- */
@@ -210,11 +226,84 @@ document.getElementById("start").onclick=()=>{
   bassLoop();
 
   // Speak one random shayari
-  const speakText=shayariList[Math.floor(Math.random()*shayariList.length)];
-  const u=new SpeechSynthesisUtterance(speakText);
-  u.lang="hi-IN";
+  function speak(){
+  // force music audible BEFORE voice
+  music.volume = 0.20;
+
+  const u = new SpeechSynthesisUtterance(wish);
+  u.lang = "hi-IN";
+  u.rate = 0.9;
+  u.pitch = 0.87;
+
+  // 🔊 Duck music while speaking
+  u.onstart = () => {
+    music.volume = 0.35; // still audible under voice
+  };
+
+  // 🔊 FORCE music back after speech
+  u.onend = () => {
+    setTimeout(() => {
+      music.volume = 0.30; // 🔥 bring DJ back hard
+    }, 200);
+  };
+
+  speechSynthesis.cancel(); // avoid overlap bugs
   speechSynthesis.speak(u);
+}
+/* ✍️ Handwriting Font */
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap');
+
 };
+  /* ✨ TEXT ANIMATIONS */
+.animated-text{
+  animation: glowText 2s infinite alternate;
+}
+
+@keyframes glowText{
+  from{
+    text-shadow:0 0 5px #ffd700,0 0 10px #ff00ff;
+  }
+  to{
+    text-shadow:0 0 15px #00ffff,0 0 30px #ff00ff;
+  }
+}
+
+.slide-in{
+  animation: slideIn .8s ease forwards;
+}
+
+@keyframes slideIn{
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+/* 🕺 TEXT SHAKE ON BASS */
+.text-shake{
+  animation:textShake .25s linear;
+}
+
+@keyframes textShake{
+  0%{transform:translate(0)}
+  25%{transform:translate(-3px,2px)}
+  50%{transform:translate(3px,-2px)}
+  75%{transform:translate(-2px,1px)}
+  100%{transform:translate(0)}
+}
+// 🕺 Trigger text shake safely
+function shakeText(){
+  const el = document.getElementById("shayari") || document.querySelector(".message");
+  if(!el) return;
+
+  el.classList.remove("text-shake");
+  void el.offsetWidth; // force reflow
+  el.classList.add("text-shake");
+}
+
 </script>
 
 </body>
