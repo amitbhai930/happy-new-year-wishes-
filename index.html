@@ -2,255 +2,219 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<title>नववर्ष 2026 – Amit Rana 🎉</title>
+<title>Happy New Year 2026 – Amit Rana</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
-
 body{
+  margin:0;
   height:100vh;
-  background:#000;
-  overflow:hidden;
-  color:#fff;
+  background:black;
+  color:white;
   text-align:center;
-  transition:filter .15s ease;
+  overflow:hidden;
+  font-family:Segoe UI,sans-serif;
 }
 
-/* 🎬 VIDEO BACKGROUND */
-#bgVideo{
+/* Background video */
+video{
   position:fixed;
   inset:0;
   width:100%;
   height:100%;
   object-fit:cover;
-  z-index:-5;
   filter:brightness(.35);
+  z-index:-3;
 }
 
-/* 🔴🔵 STROBE LIGHTS */
+/* Strobe lights */
 .strobe{
   position:fixed;
   inset:0;
-  z-index:-4;
-  animation:strobe .35s infinite alternate;
+  background:rgba(255,0,0,.12);
+  animation:strobe .4s infinite alternate;
+  z-index:-2;
 }
 @keyframes strobe{
-  0%{background:rgba(255,0,0,.15)}
-  100%{background:rgba(0,0,255,.15)}
+  from{background:rgba(255,0,0,.12)}
+  to{background:rgba(0,0,255,.12)}
 }
 
-/* 🎆 TAP OVERLAY */
-#overlay{
+/* Start overlay */
+#start{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.85);
+  background:rgba(0,0,0,.9);
   display:flex;
   align-items:center;
   justify-content:center;
-  z-index:10;
   font-size:1.4rem;
-  animation:pulse 1.5s infinite;
+  cursor:pointer;
+  z-index:10;
 }
-@keyframes pulse{0%{opacity:.6}50%{opacity:1}100%{opacity:.6}}
 
+/* Content */
 .container{
   position:relative;
   top:50%;
   transform:translateY(-50%);
-  padding:20px;
-  z-index:2;
+  padding:15px;
 }
 
-h1{
-  font-size:3rem;
-  animation:glow 2s infinite alternate;
-}
-@keyframes glow{
-  from{text-shadow:0 0 10px #ff00ff}
-  to{text-shadow:0 0 40px #00ffff}
-}
+h1{font-size:3rem;color:#ffd700}
+.name{color:#00ffff;font-size:1.4rem;margin-bottom:10px}
 
-.name{font-size:1.6rem;color:#00ffff;margin-top:10px}
-
-.message{
-  margin:15px auto;
-  max-width:900px;
-  font-size:1.1rem;
-  line-height:1.8;
-  color:#ffd700;
-}
-
-/* 👗 RANDOM SARI IMAGE */
-#wishImage{
-  width:280px;
-  height:180px;
-  margin:18px auto;
-  border-radius:16px;
+/* Image slider */
+#slider{
+  width:260px;
+  height:160px;
+  margin:10px auto;
+  border-radius:14px;
   background-size:cover;
   background-position:center;
-  box-shadow:0 0 35px #00ffff;
+  box-shadow:0 0 25px #00ffff;
 }
 
-/* 🎆 FIREWORKS */
+/* Shayari */
+#shayari{
+  max-width:800px;
+  margin:15px auto;
+  font-size:1.1rem;
+  line-height:1.7;
+  color:#ffd700;
+  transition:opacity .6s;
+}
+
+/* Fireworks */
 .firework{
   position:absolute;
-  width:4px;
-  height:4px;
+  width:4px;height:4px;
   border-radius:50%;
-  animation:explode 1.4s ease-out forwards;
+  background:hsl(0,100%,60%);
+  animation:boom 1.4s forwards;
 }
-@keyframes explode{
-  from{transform:scale(1);opacity:1}
+@keyframes boom{
   to{transform:translate(var(--x),var(--y)) scale(0);opacity:0}
 }
-
-/* 🎥 CAMERA FX */
-body.zoom{animation:zoom .25s ease}
-@keyframes zoom{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
-body.shake{animation:shake .25s linear}
-@keyframes shake{
-  0%{transform:translate(0)}
-  25%{transform:translate(-10px,5px)}
-  50%{transform:translate(10px,-5px)}
-  75%{transform:translate(-8px,4px)}
-  100%{transform:translate(0)}
-}
-
-/* 🐢 SLOW MOTION */
-body.slow{filter:blur(.4px) brightness(.9)}
 </style>
 </head>
 
 <body>
 
-<video id="bgVideo" src="video.mp4" autoplay muted loop playsinline></video>
+<video src="video.mp4" autoplay muted loop playsinline></video>
 <div class="strobe"></div>
-<div id="overlay">👆 Tap to Start Celebration 🎧🎆</div>
+
+<div id="start">👆 TAP ONCE TO START CELEBRATION 🎧🎆</div>
 
 <div class="container">
-  <h1>🎉 नववर्ष 2026 🎉</h1>
+  <h1>🎉 Happy New Year 2026 🎉</h1>
   <div class="name">✨ Amit Rana ✨</div>
-  <div id="wishImage"></div>
-  <div class="message" id="wishText"></div>
+  <div id="slider"></div>
+  <div id="shayari"></div>
 </div>
 
-<!-- 🎧 DJ MUSIC -->
-<audio id="music" autoplay muted loop playsinline crossorigin="anonymous">
+<audio id="music" loop muted playsinline>
   <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_94c56e7b2f.mp3">
 </audio>
 
 <script>
-/* ======================
-   👗 RANDOM SARI IMAGES
-   (ADD MORE IF YOU WANT)
-====================== */
-const sariImages=[
+/* ---------------- IMAGES ---------------- */
+const images=[
  "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6",
- "https://images.unsplash.com/photo-1600180758890-6b94519a8ba6",
  "https://images.unsplash.com/photo-1583394838336-acd977736f90",
- "https://images.unsplash.com/photo-1622126807280-9b5b32b28f8f"
+ "https://images.unsplash.com/photo-1600180758890-6b94519a8ba6",
+ "https://images.unsplash.com/photo-1513151233558-d860c5398176"
 ];
 
-document.getElementById("wishImage").style.backgroundImage =
-  `url(${sariImages[Math.floor(Math.random()*sariImages.length)]})`;
+let imgIndex=0;
+const slider=document.getElementById("slider");
+function slideImage(){
+  slider.style.backgroundImage=`url(${images[imgIndex]})`;
+  imgIndex=(imgIndex+1)%images.length;
+}
+slideImage();
+setInterval(slideImage,4000);
 
-/* ======================
-   🎁 RANDOM WISHES
-====================== */
-const wishes=[
-"नया साल 2026 आपके जीवन में नई ऊर्जा, नई खुशियाँ और नई सफलताएँ लेकर आए।",
-"ईश्वर करे यह नववर्ष आपके लिए स्वास्थ्य, प्रेम और समृद्धि से भरा हो।",
-"2026 आपके जीवन में उजाला, आत्मविश्वास और सफलता लेकर आए।"
+/* ---------------- SHAYARI ---------------- */
+const shayariList=[
+"नया साल लाया है खुशियों की सौगात,\nहर दिन हो सुनहरा, हर रात हो खास।",
+"बीते साल को अलविदा, नए को करें स्वीकार,\nखुशियों से भरा हो 2026 का हर त्यौहार।",
+"नए सपने, नई उड़ान,\nनया साल दे आपको नई पहचान।",
+"हर सुबह नई उम्मीद लाए,\nनया साल आपके जीवन में उजाला लाए।",
+"हँसी, खुशी और प्यार,\nनया साल लाए खुशियों की बहार।"
 ];
-const wish=wishes[Math.floor(Math.random()*wishes.length)];
-document.getElementById("wishText").innerText=wish;
 
-/* ======================
-   🎧 AUDIO SETUP
-====================== */
-const music=document.getElementById("music");
-const ctx=new (window.AudioContext||window.webkitAudioContext)();
-const src=ctx.createMediaElementSource(music);
-const analyser=ctx.createAnalyser();
-analyser.fftSize=256;
-src.connect(analyser);
-analyser.connect(ctx.destination);
-const data=new Uint8Array(analyser.frequencyBinCount);
-
-/* 🔊 FADE IN */
-function fadeIn(){
-  music.volume=0;
-  let v=0;
-  const i=setInterval(()=>{
-    v+=0.02;
-    music.volume=v;
-    if(v>=0.5) clearInterval(i);
-  },60);
+let shIndex=0;
+const shDiv=document.getElementById("shayari");
+function changeShayari(){
+  shDiv.style.opacity=0;
+  setTimeout(()=>{
+    shDiv.innerText=shayariList[shIndex];
+    shDiv.style.opacity=1;
+    shIndex=(shIndex+1)%shayariList.length;
+  },400);
 }
+changeShayari();
+setInterval(changeShayari,5000);
 
-/* 🔊 AUTO SPEAK */
-function speak(){
-  const u=new SpeechSynthesisUtterance(wish);
-  u.lang="hi-IN";
-  u.rate=0.9;
-  u.pitch=0.8;
-  u.onstart=()=>music.volume=0.18;
-  u.onend=()=>music.volume=0.45;
-  speechSynthesis.speak(u);
-}
-
-/* 🎆 FIREWORKS */
-function explode(x,y,n){
-  for(let i=0;i<n;i++){
+/* ---------------- FIREWORKS ---------------- */
+function explode(){
+  for(let i=0;i<40;i++){
     const f=document.createElement("div");
     f.className="firework";
-    f.style.left=x+"px";
-    f.style.top=y+"px";
-    const a=Math.random()*Math.PI*2;
-    const d=Math.random()*220+40;
-    f.style.setProperty("--x",Math.cos(a)*d+"px");
-    f.style.setProperty("--y",Math.sin(a)*d+"px");
+    f.style.left=Math.random()*innerWidth+"px";
+    f.style.top=Math.random()*innerHeight/2+"px";
+    f.style.setProperty("--x",(Math.random()*300-150)+"px");
+    f.style.setProperty("--y",(Math.random()*300-150)+"px");
     document.body.appendChild(f);
     setTimeout(()=>f.remove(),1400);
   }
 }
 
-/* 🔥 BASS FX + SLOW + PUMP */
-let pumping=false;
-function bassFX(){
-  requestAnimationFrame(bassFX);
+/* ---------------- AUDIO + BASS ---------------- */
+const music=document.getElementById("music");
+let ctx, analyser, data;
+
+function bassLoop(){
+  requestAnimationFrame(bassLoop);
   analyser.getByteFrequencyData(data);
   const bass=data[1]+data[2]+data[3];
-
-  if(bass>520 && !pumping){
-    pumping=true;
-    explode(Math.random()*innerWidth,Math.random()*innerHeight/2,40);
-    document.body.classList.add("shake","zoom","slow");
-    music.volume=0.18;
-
-    setTimeout(()=>{
-      document.body.classList.remove("shake","zoom","slow");
-      music.volume=0.5;
-      pumping=false;
-    },220);
-  }
+  if(bass>480) explode();
 }
 
-/* ▶️ START */
-function start(){
-  document.getElementById("overlay").remove();
-  ctx.resume();
+/* ---------------- START (ONE TAP ONLY) ---------------- */
+document.getElementById("start").onclick=()=>{
+  document.getElementById("start").remove();
+
+  ctx=new (AudioContext||webkitAudioContext)();
+  const src=ctx.createMediaElementSource(music);
+  analyser=ctx.createAnalyser();
+  analyser.fftSize=256;
+  data=new Uint8Array(analyser.frequencyBinCount);
+
+  src.connect(analyser);
+  analyser.connect(ctx.destination);
+
   music.muted=false;
+  music.volume=0;
   music.play();
-  fadeIn();
-  bassFX();
-  speak();
-}
 
-["click","touchstart"].forEach(e=>{
-  document.addEventListener(e,start,{once:true});
-});
+  // Fade in
+  let v=0;
+  const fade=setInterval(()=>{
+    v+=0.02;
+    music.volume=v;
+    if(v>=0.5) clearInterval(fade);
+  },60);
+
+  bassLoop();
+
+  // Speak one random shayari
+  const speakText=shayariList[Math.floor(Math.random()*shayariList.length)];
+  const u=new SpeechSynthesisUtterance(speakText);
+  u.lang="hi-IN";
+  speechSynthesis.speak(u);
+};
 </script>
 
 </body>
