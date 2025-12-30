@@ -19,9 +19,6 @@ body{
   overflow:hidden;
   font-family:'Kalam', cursive;
 }
-<audio id="bgMusic" preload="auto" loop muted playsinline>
-  <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_94c56e7b2f.mp3" type="audio/mpeg">
-</audio>
 
 /* Background video */
 video{
@@ -254,9 +251,9 @@ document.getElementById("start").onclick=()=>{
 
   let v=0;
   const fade=setInterval(()=>{
-    v+=0.02;
+    v+=0.9;
     music.volume=v;
-    if(v>=0.6) clearInterval(fade);
+    if(v>=0.40) clearInterval(fade);
   },60);
 
   bassLoop();
@@ -273,9 +270,9 @@ function fadeInMusic(){
   bgMusic.volume = 0;
   let v = 0;
   const fade = setInterval(() => {
-    v += 0.02;
+    v += 0.30;
     bgMusic.volume = v;
-    if (v >= 0.6) clearInterval(fade);
+    if (v >= 040) clearInterval(fade);
   }, 60);
 }
 
@@ -285,12 +282,6 @@ function startMusic(){
   bgMusic.play().catch(()=>{});
   fadeInMusic();
 }
-
-/* ONE tap unlocks everything */
-["click","touchstart"].forEach(evt=>{
-  document.addEventListener(evt, startMusic, { once:true });
-});
-
 </script>
 
 </body>
