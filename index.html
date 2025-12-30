@@ -131,10 +131,7 @@ const shayariList=[
 "हर सुबह नई उम्मीद लाए,\nनया साल आपके जीवन में उजाला लाए।",
 "हँसी, खुशी और प्यार,\nनया साल लाए खुशियों की बहार।"
 ];
-// ⌨️ TYPEWRITER EFFECT
-function typeWriter(element, text, speed = 40){
-  element.innerHTML = "";
-  element.classList.remove("slide-in");
+
 
   let i = 0;
   const timer = setInterval(()=>{
@@ -265,14 +262,7 @@ function bassLoop(){
   75%{transform:translate(-2px,1px)}
   100%{transform:translate(0)}
 }
-// 🕺 Trigger text shake safely
-function shakeText(){
-  const el = document.getElementById("shayari") || document.querySelector(".message");
-  if(!el) return;
 
-  el.classList.remove("text-shake");
-  void el.offsetWidth; // force reflow
-  el.classList.add("text-shake");
 }
 /* ✍️ Handwriting Font */
 @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap');
