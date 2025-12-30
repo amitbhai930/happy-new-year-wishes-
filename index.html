@@ -5,12 +5,10 @@
 <title>Happy New Year 2026 – Amit Rana</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- ✍️ Handwriting Font -->
 <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-
 body{
   height:100vh;
   background:black;
@@ -19,8 +17,6 @@ body{
   overflow:hidden;
   font-family:'Kalam', cursive;
 }
-
-/* Background video */
 video{
   position:fixed;
   inset:0;
@@ -30,8 +26,6 @@ video{
   filter:brightness(.35);
   z-index:-3;
 }
-
-/* Strobe lights */
 .strobe{
   position:fixed;
   inset:0;
@@ -42,8 +36,6 @@ video{
   from{background:rgba(255,0,0,.12)}
   to{background:rgba(0,0,255,.12)}
 }
-
-/* Start overlay */
 #start{
   position:fixed;
   inset:0;
@@ -55,19 +47,14 @@ video{
   cursor:pointer;
   z-index:10;
 }
-
-/* Content */
 .container{
   position:relative;
   top:50%;
   transform:translateY(-50%);
   padding:15px;
 }
-
 h1{font-size:3rem;color:#ffd700}
 .name{color:#00ffff;font-size:1.4rem;margin-bottom:10px}
-
-/* Image slider */
 #slider{
   width:260px;
   height:160px;
@@ -77,8 +64,6 @@ h1{font-size:3rem;color:#ffd700}
   background-position:center;
   box-shadow:0 0 25px #00ffff;
 }
-
-/* Shayari */
 #shayari{
   max-width:800px;
   margin:15px auto;
@@ -86,26 +71,6 @@ h1{font-size:3rem;color:#ffd700}
   line-height:1.8;
   color:#ffd700;
 }
-
-/* Text glow */
-.animated-text{
-  animation:glowText 2s infinite alternate;
-}
-@keyframes glowText{
-  from{text-shadow:0 0 5px #ffd700,0 0 10px #ff00ff}
-  to{text-shadow:0 0 15px #00ffff,0 0 30px #ff00ff}
-}
-
-/* Slide in */
-.slide-in{
-  animation:slideIn .8s ease forwards;
-}
-@keyframes slideIn{
-  from{opacity:0;transform:translateY(20px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-/* Text shake */
 .text-shake{
   animation:textShake .25s linear;
 }
@@ -116,8 +81,6 @@ h1{font-size:3rem;color:#ffd700}
   75%{transform:translate(-2px,1px)}
   100%{transform:translate(0)}
 }
-
-/* Fireworks */
 .firework{
   position:absolute;
   width:4px;height:4px;
@@ -142,7 +105,7 @@ h1{font-size:3rem;color:#ffd700}
   <h1>🎉 Happy New Year 2026 🎉</h1>
   <div class="name">✨ Amit Rana ✨</div>
   <div id="slider"></div>
-  <div id="shayari" class="animated-text"></div>
+  <div id="shayari"></div>
 </div>
 
 <audio id="music" loop muted playsinline>
@@ -150,12 +113,11 @@ h1{font-size:3rem;color:#ffd700}
 </audio>
 
 <script>
-/* Images */
+/* Slider */
 const images=[
  "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6",
  "https://images.unsplash.com/photo-1583394838336-acd977736f90",
- "https://images.unsplash.com/photo-1600180758890-6b94519a8ba6",
- "https://images.unsplash.com/photo-1513151233558-d860c5398176"
+ "https://images.unsplash.com/photo-1600180758890-6b94519a8ba6"
 ];
 let imgIndex=0;
 const slider=document.getElementById("slider");
@@ -170,43 +132,25 @@ setInterval(slideImage,4000);
 const shayariList=[
 "नया साल लाया है खुशियों की सौगात,\nहर दिन हो सुनहरा, हर रात हो खास।",
 "बीते साल को अलविदा, नए को करें स्वीकार,\nखुशियों से भरा हो 2026 का हर त्यौहार।",
-"नए सपने, नई उड़ान,\nनया साल दे आपको नई पहचान।",
-"हर सुबह नई उम्मीद लाए,\nनया साल आपके जीवन में उजाला लाए।"
+"नए सपने, नई उड़ान,\nनया साल दे आपको नई पहचान।"
 ];
-
 let shIndex=0;
 const shDiv=document.getElementById("shayari");
-
-function typeWriter(el,text){
-  el.innerHTML="";
-  let i=0;
-  const t=setInterval(()=>{
-    el.innerHTML+=text.charAt(i++);
-    if(i>=text.length){
-      clearInterval(t);
-      el.classList.add("slide-in");
-    }
-  },40);
-}
-
 function changeShayari(){
-  shDiv.classList.remove("slide-in");
-  typeWriter(shDiv, shayariList[shIndex]);
+  shDiv.innerText=shayariList[shIndex];
   shIndex=(shIndex+1)%shayariList.length;
 }
 changeShayari();
 setInterval(changeShayari,5000);
 
-/* Text shake */
+/* FX */
 function shakeText(){
   shDiv.classList.remove("text-shake");
   void shDiv.offsetWidth;
   shDiv.classList.add("text-shake");
 }
-
-/* Fireworks */
 function explode(){
-  for(let i=0;i<35;i++){
+  for(let i=0;i<25;i++){
     const f=document.createElement("div");
     f.className="firework";
     f.style.left=Math.random()*innerWidth+"px";
@@ -218,11 +162,13 @@ function explode(){
   }
 }
 
-/* Audio + Bass */
+/* Audio */
 const music=document.getElementById("music");
 let ctx, analyser, data;
+let started=false;
 
 function bassLoop(){
+  if(!started) return;
   requestAnimationFrame(bassLoop);
   analyser.getByteFrequencyData(data);
   const bass=data[1]+data[2]+data[3];
@@ -232,11 +178,13 @@ function bassLoop(){
   }
 }
 
-/* START (required by browser) */
+/* START (SAFE SEQUENCE) */
 document.getElementById("start").onclick=()=>{
   document.getElementById("start").remove();
 
   ctx=new (AudioContext||webkitAudioContext)();
+  ctx.resume();
+
   const src=ctx.createMediaElementSource(music);
   analyser=ctx.createAnalyser();
   analyser.fftSize=256;
@@ -246,66 +194,29 @@ document.getElementById("start").onclick=()=>{
   analyser.connect(ctx.destination);
 
   music.muted=false;
-  music.volume=0;
-  music.play();
+  music.volume=0.01;
+  music.play().then(()=>{
+    started=true;
 
-  let v=0;
-  const fade=setInterval(()=>{
-    v+=0.9;
-    music.volume=v;
-    if(v>=0.40) clearInterval(fade);
-  },60);
+    // fade in
+    let v=0.01;
+    const fade=setInterval(()=>{
+      v+=0.02;
+      music.volume=v;
+      if(v>=0.6) clearInterval(fade);
+    },80);
 
-  bassLoop();
+    // start bass AFTER audio is running
+    setTimeout(bassLoop,300);
 
-function speakText(text){
-  if(isSpeaking) return; // prevent interruption
-
-  isSpeaking = true;
-  speechSynthesis.cancel();
-
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = "hi-IN";
-  u.rate = 0.85;   // slower = more stable
-  u.pitch = 0.9;
-
-  // keep music audible
-  u.onstart = () => {
-    music.volume = 0.35;
-  };
-
-  u.onend = () => {
-    isSpeaking = false;
-    music.volume = 0.6; /  restore music
-  };
-
-  u.onerror = () => {
-    isSpeaking = false;
-  };
-
-  speechSynthesis.speak(u);
-}
-;
-let isSpeaking = false;
-  const bgMusic = document.getElementById("bgMusic");
-
-/* Smooth fade-in */
-function fadeInMusic(){
-  bgMusic.volume = 0;
-  let v = 0;
-  const fade = setInterval(() => {
-    v += 0.30;
-    bgMusic.volume = v;
-    if (v >= 040) clearInterval(fade);
-  }, 60);
-}
-
-/* Unlock music on first user tap */
-function startMusic(){
-  bgMusic.muted = false;
-  bgMusic.play().catch(()=>{});
-  fadeInMusic();
-}
+    // speak AFTER everything is stable
+    setTimeout(()=>{
+      const u=new SpeechSynthesisUtterance(shDiv.innerText);
+      u.lang="hi-IN";
+      speechSynthesis.speak(u);
+    },800);
+  });
+};
 </script>
 
 </body>
