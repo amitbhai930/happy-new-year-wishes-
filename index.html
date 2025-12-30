@@ -40,18 +40,6 @@ video{
   to{background:rgba(0,0,255,.12)}
 }
 
-/* Start overlay */
-#start{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.9);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:1.4rem;
-  cursor:pointer;
-  z-index:10;
-}
 
 /* Content */
 .container{
@@ -198,22 +186,6 @@ function bassLoop(){
   shakeText(); // 🕺 text shakes on bass hit
 }
 
-/* ---------------- START (ONE TAP ONLY) ---------------- */
-document.getElementById("start").onclick=()=>{
-  document.getElementById("start").remove();
-
-  ctx=new (AudioContext||webkitAudioContext)();
-  const src=ctx.createMediaElementSource(music);
-  analyser=ctx.createAnalyser();
-  analyser.fftSize=256;
-  data=new Uint8Array(analyser.frequencyBinCount);
-
-  src.connect(analyser);
-  analyser.connect(ctx.destination);
-
-  music.muted=false;
-  music.volume=0;
-  music.play();
 
   // Fade in
   let v=0;
