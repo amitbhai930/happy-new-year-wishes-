@@ -5,15 +5,19 @@
 <title>Happy New Year 2026 – Amit Rana</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- ✍️ Handwriting Font -->
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
+
 <style>
+*{margin:0;padding:0;box-sizing:border-box}
+
 body{
-  margin:0;
   height:100vh;
   background:black;
   color:white;
   text-align:center;
   overflow:hidden;
-  font-family:Segoe UI,sans-serif;
+  font-family:'Kalam', cursive;
 }
 
 /* Background video */
@@ -31,7 +35,6 @@ video{
 .strobe{
   position:fixed;
   inset:0;
-  background:rgba(255,0,0,.12);
   animation:strobe .4s infinite alternate;
   z-index:-2;
 }
@@ -40,6 +43,18 @@ video{
   to{background:rgba(0,0,255,.12)}
 }
 
+/* Start overlay */
+#start{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.9);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.4rem;
+  cursor:pointer;
+  z-index:10;
+}
 
 /* Content */
 .container{
@@ -67,10 +82,39 @@ h1{font-size:3rem;color:#ffd700}
 #shayari{
   max-width:800px;
   margin:15px auto;
-  font-size:1.1rem;
-  line-height:1.7;
+  font-size:1.2rem;
+  line-height:1.8;
   color:#ffd700;
-  transition:opacity .6s;
+}
+
+/* Text glow */
+.animated-text{
+  animation:glowText 2s infinite alternate;
+}
+@keyframes glowText{
+  from{text-shadow:0 0 5px #ffd700,0 0 10px #ff00ff}
+  to{text-shadow:0 0 15px #00ffff,0 0 30px #ff00ff}
+}
+
+/* Slide in */
+.slide-in{
+  animation:slideIn .8s ease forwards;
+}
+@keyframes slideIn{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* Text shake */
+.text-shake{
+  animation:textShake .25s linear;
+}
+@keyframes textShake{
+  0%{transform:translate(0)}
+  25%{transform:translate(-3px,2px)}
+  50%{transform:translate(3px,-2px)}
+  75%{transform:translate(-2px,1px)}
+  100%{transform:translate(0)}
 }
 
 /* Fireworks */
@@ -106,14 +150,13 @@ h1{font-size:3rem;color:#ffd700}
 </audio>
 
 <script>
-/* ---------------- IMAGES ---------------- */
+/* Images */
 const images=[
  "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6",
  "https://images.unsplash.com/photo-1583394838336-acd977736f90",
  "https://images.unsplash.com/photo-1600180758890-6b94519a8ba6",
  "https://images.unsplash.com/photo-1513151233558-d860c5398176"
 ];
-
 let imgIndex=0;
 const slider=document.getElementById("slider");
 function slideImage(){
@@ -123,43 +166,47 @@ function slideImage(){
 slideImage();
 setInterval(slideImage,4000);
 
-/* ---------------- SHAYARI ---------------- */
+/* Shayari */
 const shayariList=[
 "नया साल लाया है खुशियों की सौगात,\nहर दिन हो सुनहरा, हर रात हो खास।",
 "बीते साल को अलविदा, नए को करें स्वीकार,\nखुशियों से भरा हो 2026 का हर त्यौहार।",
 "नए सपने, नई उड़ान,\nनया साल दे आपको नई पहचान।",
-"हर सुबह नई उम्मीद लाए,\nनया साल आपके जीवन में उजाला लाए।",
-"हँसी, खुशी और प्यार,\nनया साल लाए खुशियों की बहार।"
+"हर सुबह नई उम्मीद लाए,\nनया साल आपके जीवन में उजाला लाए।"
 ];
-
-
-  let i = 0;
-  const timer = setInterval(()=>{
-    element.innerHTML += text.charAt(i);
-    i++;
-    if(i >= text.length){
-      clearInterval(timer);
-      element.classList.add("slide-in");
-    }
-  }, speed);
-}
 
 let shIndex=0;
 const shDiv=document.getElementById("shayari");
+
+function typeWriter(el,text){
+  el.innerHTML="";
+  let i=0;
+  const t=setInterval(()=>{
+    el.innerHTML+=text.charAt(i++);
+    if(i>=text.length){
+      clearInterval(t);
+      el.classList.add("slide-in");
+    }
+  },40);
+}
+
 function changeShayari(){
-  const text = shayariList[shIndex];
-  typeWriter(shDiv, text);
-  shIndex = (shIndex + 1) % shayariList.length;
+  shDiv.classList.remove("slide-in");
+  typeWriter(shDiv, shayariList[shIndex]);
+  shIndex=(shIndex+1)%shayariList.length;
 }
-#shayari, .message{
-  font-family:'Kalam', cursive;
-  letter-spacing:0.5px;
+changeShayari();
+setInterval(changeShayari,5000);
+
+/* Text shake */
+function shakeText(){
+  shDiv.classList.remove("text-shake");
+  void shDiv.offsetWidth;
+  shDiv.classList.add("text-shake");
 }
 
-
-/* ---------------- FIREWORKS ---------------- */
+/* Fireworks */
 function explode(){
-  for(let i=0;i<40;i++){
+  for(let i=0;i<35;i++){
     const f=document.createElement("div");
     f.className="firework";
     f.style.left=Math.random()*innerWidth+"px";
@@ -171,7 +218,7 @@ function explode(){
   }
 }
 
-/* ---------------- AUDIO + BASS ---------------- */
+/* Audio + Bass */
 const music=document.getElementById("music");
 let ctx, analyser, data;
 
@@ -179,94 +226,42 @@ function bassLoop(){
   requestAnimationFrame(bassLoop);
   analyser.getByteFrequencyData(data);
   const bass=data[1]+data[2]+data[3];
-  if(bass>480) explode();
-  shakeText(); // 🕺 text shakes on bass hit
+  if(bass>480){
+    explode();
+    shakeText();
+  }
 }
 
+/* START (required by browser) */
+document.getElementById("start").onclick=()=>{
+  document.getElementById("start").remove();
 
-  // Fade in
+  ctx=new (AudioContext||webkitAudioContext)();
+  const src=ctx.createMediaElementSource(music);
+  analyser=ctx.createAnalyser();
+  analyser.fftSize=256;
+  data=new Uint8Array(analyser.frequencyBinCount);
+
+  src.connect(analyser);
+  analyser.connect(ctx.destination);
+
+  music.muted=false;
+  music.volume=0;
+  music.play();
+
   let v=0;
   const fade=setInterval(()=>{
     v+=0.02;
     music.volume=v;
-    if(v>=0.5) clearInterval(fade);
+    if(v>=0.6) clearInterval(fade);
   },60);
 
   bassLoop();
 
-  // Speak one random shayari
-  function speak(){
-  // force music audible BEFORE voice
-  music.volume = 0.20;
-
-  const u = new SpeechSynthesisUtterance(wish);
-  u.lang = "hi-IN";
-  u.rate = 0.9;
-  u.pitch = 0.87;
-
-  // 🔊 Duck music while speaking
-  u.onstart = () => {
-    music.volume = 0.35; // still audible under voice
-  };
-
-  // 🔊 FORCE music back after speech
-  u.onend = () => {
-    setTimeout(() => {
-      music.volume = 0.30; // 🔥 bring DJ back hard
-    }, 200);
-  };
-
-  speechSynthesis.cancel(); // avoid overlap bugs
+  const u=new SpeechSynthesisUtterance(shDiv.innerText);
+  u.lang="hi-IN";
   speechSynthesis.speak(u);
-}
-
-  
 };
-  /* ✨ TEXT ANIMATIONS */
-.animated-text{
-  animation: glowText 2s infinite alternate;
-}
-
-@keyframes glowText{
-  from{
-    text-shadow:0 0 5px #ffd700,0 0 10px #ff00ff;
-  }
-  to{
-    text-shadow:0 0 15px #00ffff,0 0 30px #ff00ff;
-  }
-}
-
-.slide-in{
-  animation: slideIn .8s ease forwards;
-}
-
-@keyframes slideIn{
-  from{
-    opacity:0;
-    transform:translateY(20px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
-/* 🕺 TEXT SHAKE ON BASS */
-.text-shake{
-  animation:textShake .25s linear;
-}
-
-@keyframes textShake{
-  0%{transform:translate(0)}
-  25%{transform:translate(-3px,2px)}
-  50%{transform:translate(3px,-2px)}
-  75%{transform:translate(-2px,1px)}
-  100%{transform:translate(0)}
-}
-
-}
-/* ✍️ Handwriting Font */
-@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap');
-
 </script>
 
 </body>
