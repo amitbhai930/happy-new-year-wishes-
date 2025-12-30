@@ -10,39 +10,56 @@
 
 body{
   height:100vh;
-  background:radial-gradient(circle at center,#200040,#000);
+  background:#000;
   overflow:hidden;
   color:#fff;
   text-align:center;
+  transition:filter .15s ease;
 }
 
-/* 🎥 CAMERA ZOOM */
-body.zoom{
-  animation:zoomPulse .25s ease;
-}
-@keyframes zoomPulse{
-  0%{transform:scale(1)}
-  50%{transform:scale(1.05)}
-  100%{transform:scale(1)}
+/* 🎬 VIDEO BACKGROUND */
+#bgVideo{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:-5;
+  filter:brightness(.35);
 }
 
-/* 🧨 SHAKE */
-body.shake{
-  animation:shake .25s linear;
+/* 🔴🔵 STROBE LIGHTS */
+.strobe{
+  position:fixed;
+  inset:0;
+  z-index:-4;
+  animation:strobe .35s infinite alternate;
 }
-@keyframes shake{
-  0%{transform:translate(0)}
-  25%{transform:translate(-10px,5px)}
-  50%{transform:translate(10px,-5px)}
-  75%{transform:translate(-8px,4px)}
-  100%{transform:translate(0)}
+@keyframes strobe{
+  0%{background:rgba(255,0,0,.15)}
+  100%{background:rgba(0,0,255,.15)}
 }
+
+/* 🎆 TAP OVERLAY */
+#overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:10;
+  font-size:1.4rem;
+  animation:pulse 1.5s infinite;
+}
+@keyframes pulse{0%{opacity:.6}50%{opacity:1}100%{opacity:.6}}
 
 .container{
   position:relative;
   top:50%;
   transform:translateY(-50%);
   padding:20px;
+  z-index:2;
 }
 
 h1{
@@ -54,19 +71,25 @@ h1{
   to{text-shadow:0 0 40px #00ffff}
 }
 
-.name{
-  margin-top:10px;
-  font-size:1.6rem;
-  color:#00ffff;
-}
+.name{font-size:1.6rem;color:#00ffff;margin-top:10px}
 
 .message{
-  margin-top:18px;
+  margin:15px auto;
+  max-width:900px;
   font-size:1.1rem;
   line-height:1.8;
   color:#ffd700;
-  max-width:900px;
-  margin:auto;
+}
+
+/* 👗 RANDOM SARI IMAGE */
+#wishImage{
+  width:280px;
+  height:180px;
+  margin:18px auto;
+  border-radius:16px;
+  background-size:cover;
+  background-position:center;
+  box-shadow:0 0 35px #00ffff;
 }
 
 /* 🎆 FIREWORKS */
@@ -75,204 +98,159 @@ h1{
   width:4px;
   height:4px;
   border-radius:50%;
-  animation:explode 1.5s ease-out forwards;
+  animation:explode 1.4s ease-out forwards;
 }
 @keyframes explode{
   from{transform:scale(1);opacity:1}
-  to{
-    transform:translate(var(--x),var(--y)) scale(0);
-    opacity:0
-  }
+  to{transform:translate(var(--x),var(--y)) scale(0);opacity:0}
 }
 
-/* 💡 DJ LIGHT RAYS */
-.ray{
-  position:absolute;
-  width:2px;
-  height:120vh;
-  background:linear-gradient(transparent,rgba(0,255,255,.8),transparent);
-  top:-10vh;
-  left:50%;
-  transform-origin:top;
-  animation:rayRotate 2s linear infinite;
-}
-@keyframes rayRotate{
-  from{transform:rotate(0deg)}
-  to{transform:rotate(360deg)}
+/* 🎥 CAMERA FX */
+body.zoom{animation:zoom .25s ease}
+@keyframes zoom{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+body.shake{animation:shake .25s linear}
+@keyframes shake{
+  0%{transform:translate(0)}
+  25%{transform:translate(-10px,5px)}
+  50%{transform:translate(10px,-5px)}
+  75%{transform:translate(-8px,4px)}
+  100%{transform:translate(0)}
 }
 
-/* ✨ SPARKLES */
-.sparkle{
-  position:absolute;
-  width:6px;
-  height:6px;
-  background:gold;
-  border-radius:50%;
-  animation:sparkle 4s linear infinite;
-}
-@keyframes sparkle{
-  from{transform:translateY(100vh);opacity:1}
-  to{transform:translateY(-10vh);opacity:0}
-}
-
-footer{
-  position:absolute;
-  bottom:15px;
-  width:100%;
-  font-size:.9rem;
-  opacity:.6;
-}
+/* 🐢 SLOW MOTION */
+body.slow{filter:blur(.4px) brightness(.9)}
 </style>
 </head>
 
 <body>
 
+<video id="bgVideo" src="video.mp4" autoplay muted loop playsinline></video>
+<div class="strobe"></div>
+<div id="overlay">👆 Tap to Start Celebration 🎧🎆</div>
+
 <div class="container">
   <h1>🎉 नववर्ष 2026 🎉</h1>
   <div class="name">✨ Amit Rana ✨</div>
+  <div id="wishImage"></div>
   <div class="message" id="wishText"></div>
-  <div style="opacity:.7;margin-top:12px">🎧 स्क्रीन पर एक बार टैप करें</div>
 </div>
 
-<footer>DJ Bass • Echo Voice • Laser Lights 🎧🎆</footer>
-
-<!-- 🎧 DJ REMIX -->
-<audio id="music" autoplay muted loop crossorigin="anonymous">
-  <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_94c56e7b2f.mp3" type="audio/mpeg">
+<!-- 🎧 DJ MUSIC -->
+<audio id="music" autoplay muted loop playsinline crossorigin="anonymous">
+  <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_94c56e7b2f.mp3">
 </audio>
 
 <script>
 /* ======================
-   WISHES
+   👗 RANDOM SARI IMAGES
+   (ADD MORE IF YOU WANT)
 ====================== */
-const wishes=[
-`नया साल 2026 आपके जीवन में नई ऊर्जा, नई दिशा और नई सफलताएँ लेकर आए।
-ईश्वर करे कि आपके सपने पूरे हों और हर दिन खुशियों से भरा हो।
-आप और आपका परिवार सदैव स्वस्थ और खुशहाल रहें।`,
-
-`नववर्ष 2026 आपके जीवन में उजाला और सकारात्मकता लाए।
-हर चुनौती आसान बने और हर प्रयास सफल हो।
-ईश्वर आपको प्रेम, शांति और समृद्धि प्रदान करे।`
+const sariImages=[
+ "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6",
+ "https://images.unsplash.com/photo-1600180758890-6b94519a8ba6",
+ "https://images.unsplash.com/photo-1583394838336-acd977736f90",
+ "https://images.unsplash.com/photo-1622126807280-9b5b32b28f8f"
 ];
-const wishText=wishes[Math.floor(Math.random()*wishes.length)];
-document.getElementById("wishText").innerText=wishText;
+
+document.getElementById("wishImage").style.backgroundImage =
+  `url(${sariImages[Math.floor(Math.random()*sariImages.length)]})`;
 
 /* ======================
-   AUDIO CONTEXT + HEAVY BASS
+   🎁 RANDOM WISHES
+====================== */
+const wishes=[
+"नया साल 2026 आपके जीवन में नई ऊर्जा, नई खुशियाँ और नई सफलताएँ लेकर आए।",
+"ईश्वर करे यह नववर्ष आपके लिए स्वास्थ्य, प्रेम और समृद्धि से भरा हो।",
+"2026 आपके जीवन में उजाला, आत्मविश्वास और सफलता लेकर आए।"
+];
+const wish=wishes[Math.floor(Math.random()*wishes.length)];
+document.getElementById("wishText").innerText=wish;
+
+/* ======================
+   🎧 AUDIO SETUP
 ====================== */
 const music=document.getElementById("music");
 const ctx=new (window.AudioContext||window.webkitAudioContext)();
 const src=ctx.createMediaElementSource(music);
-
-const bassBoost=ctx.createBiquadFilter();
-bassBoost.type="lowshelf";
-bassBoost.frequency.value=150;
-bassBoost.gain.value=18;
-
 const analyser=ctx.createAnalyser();
 analyser.fftSize=256;
-
-src.connect(bassBoost);
-bassBoost.connect(analyser);
+src.connect(analyser);
 analyser.connect(ctx.destination);
-
 const data=new Uint8Array(analyser.frequencyBinCount);
 
-/* ======================
-   🔊 DROP ECHO VOICE
-====================== */
-function speakWish(){
-  music.muted=false;
-  music.volume=0.35;
-
-  const utter=new SpeechSynthesisUtterance(wishText);
-  utter.lang="hi-IN";
-  utter.rate=0.9;
-  utter.pitch=0.8;
-
-  utter.onstart=()=>{
-    music.volume=0.15;
-    pulse();
-  };
-
-  utter.onend=()=>{
-    music.volume=0.4;
-  };
-
-  speechSynthesis.speak(utter);
+/* 🔊 FADE IN */
+function fadeIn(){
+  music.volume=0;
+  let v=0;
+  const i=setInterval(()=>{
+    v+=0.02;
+    music.volume=v;
+    if(v>=0.5) clearInterval(i);
+  },60);
 }
 
-/* ======================
-   🎆 BASS SYNC FX
-====================== */
+/* 🔊 AUTO SPEAK */
+function speak(){
+  const u=new SpeechSynthesisUtterance(wish);
+  u.lang="hi-IN";
+  u.rate=0.9;
+  u.pitch=0.8;
+  u.onstart=()=>music.volume=0.18;
+  u.onend=()=>music.volume=0.45;
+  speechSynthesis.speak(u);
+}
+
+/* 🎆 FIREWORKS */
+function explode(x,y,n){
+  for(let i=0;i<n;i++){
+    const f=document.createElement("div");
+    f.className="firework";
+    f.style.left=x+"px";
+    f.style.top=y+"px";
+    const a=Math.random()*Math.PI*2;
+    const d=Math.random()*220+40;
+    f.style.setProperty("--x",Math.cos(a)*d+"px");
+    f.style.setProperty("--y",Math.sin(a)*d+"px");
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),1400);
+  }
+}
+
+/* 🔥 BASS FX + SLOW + PUMP */
+let pumping=false;
 function bassFX(){
   requestAnimationFrame(bassFX);
   analyser.getByteFrequencyData(data);
   const bass=data[1]+data[2]+data[3];
 
-  if(bass>480){
-    explode(Math.random()*innerWidth,Math.random()*innerHeight/2,35);
-    pulse();
-    createRay();
+  if(bass>520 && !pumping){
+    pumping=true;
+    explode(Math.random()*innerWidth,Math.random()*innerHeight/2,40);
+    document.body.classList.add("shake","zoom","slow");
+    music.volume=0.18;
+
+    setTimeout(()=>{
+      document.body.classList.remove("shake","zoom","slow");
+      music.volume=0.5;
+      pumping=false;
+    },220);
   }
 }
 
-function pulse(){
-  document.body.classList.add("shake","zoom");
-  setTimeout(()=>document.body.classList.remove("shake","zoom"),200);
-}
-
-/* ======================
-   FIREWORK ENGINE
-====================== */
-function explode(x,y,count){
-  for(let i=0;i<count;i++){
-    const f=document.createElement("div");
-    f.className="firework";
-    f.style.left=x+"px";
-    f.style.top=y+"px";
-    f.style.backgroundColor=`hsl(${Math.random()*360},100%,60%)`;
-    const a=Math.random()*Math.PI*2;
-    const d=Math.random()*240+60;
-    f.style.setProperty("--x",Math.cos(a)*d+"px");
-    f.style.setProperty("--y",Math.sin(a)*d+"px");
-    document.body.appendChild(f);
-    setTimeout(()=>f.remove(),1500);
-  }
-}
-
-/* ======================
-   💡 DJ LIGHT RAY
-====================== */
-function createRay(){
-  const r=document.createElement("div");
-  r.className="ray";
-  r.style.left=Math.random()*innerWidth+"px";
-  r.style.animationDuration=Math.random()*1.5+1+"s";
-  document.body.appendChild(r);
-  setTimeout(()=>r.remove(),2000);
-}
-
-/* ======================
-   ✨ SPARKLES
-====================== */
-setInterval(()=>{
-  const s=document.createElement("div");
-  s.className="sparkle";
-  s.style.left=Math.random()*innerWidth+"px";
-  s.style.animationDuration=Math.random()*3+3+"s";
-  document.body.appendChild(s);
-  setTimeout(()=>s.remove(),5000);
-},150);
-
-/* ======================
-   START (FIRST TAP)
-====================== */
-document.body.addEventListener("click",()=>{
+/* ▶️ START */
+function start(){
+  document.getElementById("overlay").remove();
   ctx.resume();
+  music.muted=false;
+  music.play();
+  fadeIn();
   bassFX();
-  speakWish();
-},{once:true});
+  speak();
+}
+
+["click","touchstart"].forEach(e=>{
+  document.addEventListener(e,start,{once:true});
+});
 </script>
 
 </body>
