@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>नव वर्ष 2026 शुभकामनाएँ</title>
 
 <style>
@@ -14,28 +14,29 @@ body{
     background:black;
 }
 
-/* Video Background */
+/* Background Video */
 video{
     position:fixed;
-    top:0;left:0;
+    inset:0;
     width:100%;
     height:100%;
     object-fit:cover;
-    z-index:-2;
+    z-index:-3;
 }
 
-/* Overlay */
+/* Dark overlay */
 .overlay{
     position:fixed;
     inset:0;
     background:rgba(0,0,0,.55);
-    z-index:-1;
+    z-index:-2;
 }
 
-/* Fireworks Canvas */
+/* Fireworks canvas */
 canvas{
     position:fixed;
     inset:0;
+    z-index:-1;
 }
 
 /* UI */
@@ -74,14 +75,14 @@ button{
     color:black;
 }
 
-/* Audio Reactive Lights */
+/* Audio-reactive lights */
 .light{
     position:absolute;
-    width:200px;
-    height:200px;
+    width:220px;
+    height:220px;
     border-radius:50%;
-    filter:blur(100px);
-    opacity:.85;
+    filter:blur(110px);
+    opacity:.9;
 }
 #l1{background:red;top:10%;left:10%}
 #l2{background:blue;bottom:20%;right:15%}
@@ -91,14 +92,14 @@ button{
 
 <body>
 
-<!-- BACKGROUND VIDEO -->
+<!-- Background Video -->
 <video src="video.mp4" autoplay muted loop playsinline></video>
 <div class="overlay"></div>
 
-<!-- FIREWORKS -->
+<!-- Fireworks -->
 <canvas id="fw"></canvas>
 
-<!-- LIGHTS -->
+<!-- Lights -->
 <div class="light" id="l1"></div>
 <div class="light" id="l2"></div>
 <div class="light" id="l3"></div>
@@ -110,18 +111,17 @@ button{
     <button onclick="startShow()">🎆 शायरी सुनो</button>
 </div>
 
-<!-- OFFLINE BACKGROUND MUSIC (Base64 – replace if needed) -->
-<audio id="music" loop>
-    <source src="data:audio/mp3;base64,//uQZAAAAAAAAAAAAAAAAAAAAAA..." type="audio/mpeg">
+<!-- Audio -->
+<audio id="bgMusic" loop preload="auto">
+    <source src="music.mp3" type="audio/mpeg">
 </audio>
 
-<!-- FIRECRACKER SOUND (Base64 – short burst) -->
-<audio id="cracker">
-    <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAA==" type="audio/wav">
+<audio id="cracker" preload="auto">
+    <source src="cracker.wav" type="audio/wav">
 </audio>
 
 <script>
-/* ---------------- SHAYARI (HINDI ONLY) ---------------- */
+/* ---------------- SHAYARI ---------------- */
 const shayariList=[
 `नए साल की नई सुबह,
 नई सोच, नया उजाला।
@@ -139,53 +139,57 @@ const shayariList=[
 जीवन को नया जूनून।`
 ];
 
-/* ---------------- AUDIO SETUP ---------------- */
-let ctx, analyser, data;
-let bassEnergy=0;
+/* ---------------- AUDIO ---------------- */
+let audioCtx, analyser, dataArray;
 
+/* ---------------- START ---------------- */
 function startShow(){
     const text=shayariList[Math.floor(Math.random()*shayariList.length)];
     document.getElementById("shayari").innerText=text;
 
-    // Speech
-    const sp=new SpeechSynthesisUtterance(text);
-    sp.lang="hi-IN";
-    sp.rate=.9;
-    speechSynthesis.speak(sp);
+    // Voice
+    speechSynthesis.cancel();
+    const speech=new SpeechSynthesisUtterance(text);
+    speech.lang="hi-IN";
+    speech.rate=.9;
+    speech.volume=1;
+    speechSynthesis.speak(speech);
 
     // Music
-    const music=document.getElementById("music");
-    music.volume=.5;
+    const music=document.getElementById("bgMusic");
+    music.volume=.35;
     music.play();
 
     // Web Audio API
-    ctx=new AudioContext();
-    const src=ctx.createMediaElementSource(music);
-    analyser=ctx.createAnalyser();
+    audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    const source=audioCtx.createMediaElementSource(music);
+    analyser=audioCtx.createAnalyser();
     analyser.fftSize=512;
-    data=new Uint8Array(analyser.frequencyBinCount);
-    src.connect(analyser);
-    analyser.connect(ctx.destination);
+    dataArray=new Uint8Array(analyser.frequencyBinCount);
+    source.connect(analyser);
+    analyser.connect(audioCtx.destination);
 
     audioReactive();
 }
 
 /* ---------------- BASS-ONLY DETECTION ---------------- */
 function audioReactive(){
-    analyser.getByteFrequencyData(data);
+    analyser.getByteFrequencyData(dataArray);
 
-    // Bass = lowest 10% bins
-    const bassBins=data.slice(0, data.length*0.1);
-    bassEnergy=bassBins.reduce((a,b)=>a+b,0)/bassBins.length;
+    const bassBins=dataArray.slice(0, dataArray.length*0.1);
+    const bass=bassBins.reduce((a,b)=>a+b,0)/bassBins.length;
 
-    // Lights react ONLY to bass
-    document.getElementById("l1").style.transform=`scale(${1+bassEnergy/180})`;
-    document.getElementById("l2").style.transform=`scale(${1+bassEnergy/160})`;
-    document.getElementById("l3").style.transform=`scale(${1+bassEnergy/200})`;
+    // Lights react only to bass
+    l1.style.transform=`scale(${1+bass/180})`;
+    l2.style.transform=`scale(${1+bass/160})`;
+    l3.style.transform=`scale(${1+bass/200})`;
 
-    // Firecracker trigger on strong bass hit
-    if(bassEnergy>160){
-        document.getElementById("cracker").play();
+    // Firecracker + fireworks on strong bass hit
+    if(bass>160){
+        const c=document.getElementById("cracker");
+        c.currentTime=0;
+        c.volume=1;
+        c.play();
         spawnFirework();
     }
 
@@ -194,32 +198,32 @@ function audioReactive(){
 
 /* ---------------- FIREWORKS ---------------- */
 const canvas=document.getElementById("fw");
-const c=canvas.getContext("2d");
+const ctx=canvas.getContext("2d");
 resize();window.onresize=resize;
 function resize(){canvas.width=innerWidth;canvas.height=innerHeight}
 
 let particles=[];
 function spawnFirework(){
-    for(let i=0;i<40;i++){
+    for(let i=0;i<45;i++){
         particles.push({
             x:Math.random()*canvas.width,
-            y:canvas.height*.5,
-            vx:(Math.random()-.5)*6,
-            vy:(Math.random()-.8)*6,
-            life:60,
+            y:canvas.height*0.45,
+            vx:(Math.random()-.5)*7,
+            vy:(Math.random()-.8)*7,
+            life:70,
             col:`hsl(${Math.random()*360},100%,60%)`
         });
     }
 }
 
 function animate(){
-    c.clearRect(0,0,canvas.width,canvas.height);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
     particles.forEach(p=>{
-        c.fillStyle=p.col;
-        c.fillRect(p.x,p.y,3,3);
+        ctx.fillStyle=p.col;
+        ctx.fillRect(p.x,p.y,3,3);
         p.x+=p.vx;
         p.y+=p.vy;
-        p.vy+=.08;
+        p.vy+=.09;
         p.life--;
     });
     particles=particles.filter(p=>p.life>0);
