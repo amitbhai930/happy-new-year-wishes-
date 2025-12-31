@@ -5,7 +5,103 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>नव वर्ष 2026 शुभकामनाएँ</title>
 
-<style>
+<style> 
+    /* MULTIPLE CARTOONS */
+.cartoon-wrap{
+  position:fixed;
+  bottom:20px;
+  left:0;
+  right:0;
+  display:flex;
+  justify-content:space-evenly;
+  z-index:6;
+  pointer-events:none;
+}
+
+.cartoon{
+  width:110px;
+  animation: idleFloat 3s ease-in-out infinite;
+}
+
+@keyframes idleFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+
+/* Head */
+.cartoon .head{
+  width:90px;
+  height:90px;
+  background:#ffcc99;
+  border-radius:50%;
+  margin:auto;
+  position:relative;
+}
+
+.eye{
+  width:10px;
+  height:10px;
+  background:#000;
+  border-radius:50%;
+  position:absolute;
+  top:30px;
+}
+.eye.left{left:22px}
+.eye.right{right:22px}
+
+.mouth{
+  width:26px;
+  height:8px;
+  background:#000;
+  border-radius:0 0 20px 20px;
+  position:absolute;
+  bottom:22px;
+  left:32px;
+}
+
+/* Kurta */
+.kurta-body{
+  width:80px;
+  height:90px;
+  background:linear-gradient(180deg,#ff9933,#ff6600);
+  margin:6px auto 0;
+  border-radius:10px;
+  position:relative;
+}
+
+.kurta-body::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left:50%;
+  width:4px;
+  height:100%;
+  background:#fff;
+  transform:translateX(-50%);
+}
+
+/* Name Tag */
+.name-tag{
+  position:absolute;
+  bottom:8px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:10px;
+  color:#fff;
+  font-weight:bold;
+}
+
+/* Firework reaction */
+.jump{
+  animation: jump 0.6s ease;
+}
+
+@keyframes jump{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-25px)}
+  100%{transform:translateY(0)}
+}
+
 *{margin:0;padding:0;box-sizing:border-box}
 body{
     height:100vh;
@@ -120,23 +216,56 @@ button{
     <source src="cracker.wav" type="audio/wav">
 </audio>
 
-<script>
+<script> 
+    /* CARTOON FIREWORK REACTION */
+function cartoonCelebrate(){
+  document.querySelectorAll(".cartoon").forEach(c=>{
+    c.classList.remove("jump");
+    void c.offsetWidth; // reset animation
+    c.classList.add("jump");
+  });
+}
+
+/* HOOK INTO EXISTING FIREWORK SPAWN (NO CHANGE) */
+const originalSpawnFirework = window.spawnFirework;
+window.spawnFirework = function(){
+  if(originalSpawnFirework) originalSpawnFirework();
+  cartoonCelebrate();
+};
+
+/* LIP SYNC WITH SPEECH (SAFE ADDITION) */
+const originalSpeak = speechSynthesis.speak.bind(speechSynthesis);
+speechSynthesis.speak = function(utterance){
+  document.querySelectorAll(".mouth").forEach(m=>{
+    m.style.height="18px";
+  });
+  utterance.onend=()=>{
+    document.querySelectorAll(".mouth").forEach(m=>{
+      m.style.height="8px";
+    });
+  };
+  originalSpeak(utterance);
+};
+
 /* ---------------- SHAYARI ---------------- */
 const shayariList=[
 `नए साल की नई सुबह,
 नई सोच, नया उजाला।
 2026 लाए खुशियाँ,
-हर सपना हो निराला।`,
+हर सपना हो निराला।
+— Amit Rana की तरफ से नए साल की हार्दिक शुभकामनाएँ`,
 
 `बीते कल को अलविदा,
 आज से नई उड़ान।
 नव वर्ष 2026 करे,
-हर मन का कल्याण।`,
+हर मन का कल्याण।
+— Amit Rana की reminder: नए साल की हार्दिक शुभकामनाएँ`,
 
 `हर दिन हो उम्मीद से भरा,
 हर रात हो सुकून।
 नव वर्ष 2026 दे,
-जीवन को नया जूनून।`
+जीवन को नया जूनून।
+— Amit Rana की ओर से नए साल की हार्दिक शुभकामनाएँ`
 ];
 
 /* ---------------- AUDIO ---------------- */
@@ -229,8 +358,46 @@ function animate(){
     particles=particles.filter(p=>p.life>0);
     requestAnimationFrame(animate);
 }
-animate();
+animate(); 
+    
 </script>
+<!-- MULTIPLE CARTOON CHARACTERS -->
+<div class="cartoon-wrap">
+
+  <div class="cartoon kurta" id="cartoon1">
+    <div class="head">
+      <div class="eye left"></div>
+      <div class="eye right"></div>
+      <div class="mouth"></div>
+    </div>
+    <div class="kurta-body">
+      <span class="name-tag">Amit Rana</span>
+    </div>
+  </div>
+
+  <div class="cartoon kurta" id="cartoon2">
+    <div class="head">
+      <div class="eye left"></div>
+      <div class="eye right"></div>
+      <div class="mouth"></div>
+    </div>
+    <div class="kurta-body">
+      <span class="name-tag">Amit Rana</span>
+    </div>
+  </div>
+
+  <div class="cartoon kurta" id="cartoon3">
+    <div class="head">
+      <div class="eye left"></div>
+      <div class="eye right"></div>
+      <div class="mouth"></div>
+    </div>
+    <div class="kurta-body">
+      <span class="name-tag">Amit Rana</span>
+    </div>
+  </div>
+
+</div>
 
 </body>
 </html>
