@@ -5,7 +5,89 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>नव वर्ष 2026 शुभकामनाएँ</title>
 
-<style> 
+<style>  
+/* Gift Icon */
+#gift{
+  position:fixed;
+  top:20px;
+  right:20px;
+  font-size:34px;
+  cursor:pointer;
+  z-index:10;
+  animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.2)}
+}
+
+/* Gift Popup */
+#giftBox{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:20;
+}
+
+.gift-content{
+  background:linear-gradient(135deg,#ffcc00,#ff0066);
+  padding:30px;
+  border-radius:20px;
+  color:black;
+  text-align:center;
+  font-size:1.4rem;
+  box-shadow:0 0 40px gold;
+  animation:pop 0.6s ease;
+}
+
+@keyframes pop{
+  0%{transform:scale(0)}
+  100%{transform:scale(1)}
+}
+
+    /* Human-like facial details */
+.eyebrow{
+  width:16px;
+  height:4px;
+  background:#5a3b1f;
+  position:absolute;
+  top:20px;
+  border-radius:5px;
+}
+.eyebrow.left{left:18px}
+.eyebrow.right{right:18px}
+
+.nose{
+  width:8px;
+  height:14px;
+  background:#e0a87c;
+  position:absolute;
+  top:42px;
+  left:50%;
+  transform:translateX(-50%);
+  border-radius:4px;
+}
+
+.blush{
+  width:14px;
+  height:8px;
+  background:rgba(255,120,120,0.5);
+  position:absolute;
+  top:48px;
+  border-radius:50%;
+}
+.blush.left{left:10px}
+.blush.right{right:10px}
+
+/* Softer skin tone */
+.cartoon .head{
+  background:linear-gradient(180deg,#ffd6b0,#ffbf91);
+}
+
     /* MULTIPLE CARTOONS */
 .cartoon-wrap{
   position:fixed;
@@ -359,7 +441,44 @@ function animate(){
     requestAnimationFrame(animate);
 }
 animate(); 
-    
+    /* SECRET GIFT LOGIC */
+const gift=document.getElementById("gift");
+const giftBox=document.getElementById("giftBox");
+
+let pressTimer;
+
+gift.addEventListener("mousedown",()=>{
+  pressTimer=setTimeout(openGift,800);
+});
+
+gift.addEventListener("mouseup",()=>clearTimeout(pressTimer));
+gift.addEventListener("mouseleave",()=>clearTimeout(pressTimer));
+
+gift.addEventListener("touchstart",()=>{
+  pressTimer=setTimeout(openGift,800);
+});
+
+gift.addEventListener("touchend",()=>clearTimeout(pressTimer));
+
+function openGift(){
+  giftBox.style.display="flex";
+
+  // Firecracker + fireworks + cartoon jump
+  spawnFirework();
+  cartoonCelebrate();
+
+  // Optional voice message
+  const msg=new SpeechSynthesisUtterance(
+    "Amit Rana की ओर से आपको नए साल का सरप्राइज़ गिफ्ट।"
+  );
+  msg.lang="hi-IN";
+  speechSynthesis.speak(msg);
+}
+
+giftBox.addEventListener("click",()=>{
+  giftBox.style.display="none";
+});
+
 </script>
 <!-- MULTIPLE CARTOON CHARACTERS -->
 <div class="cartoon-wrap">
@@ -368,6 +487,12 @@ animate();
     <div class="head">
       <div class="eye left"></div>
       <div class="eye right"></div>
+        <div class="eyebrow left"></div>
+<div class="eyebrow right"></div>
+<div class="nose"></div>
+<div class="blush left"></div>
+<div class="blush right"></div>
+
       <div class="mouth"></div>
     </div>
     <div class="kurta-body">
@@ -379,6 +504,12 @@ animate();
     <div class="head">
       <div class="eye left"></div>
       <div class="eye right"></div>
+        <div class="eyebrow left"></div>
+<div class="eyebrow right"></div>
+<div class="nose"></div>
+<div class="blush left"></div>
+<div class="blush right"></div>
+
       <div class="mouth"></div>
     </div>
     <div class="kurta-body">
@@ -390,6 +521,18 @@ animate();
     <div class="head">
       <div class="eye left"></div>
       <div class="eye right"></div>
+        <div class="eyebrow left"></div>
+<div class="eyebrow right"></div>
+<div class="nose"></div>
+<div class="blush left"></div>
+<div class="blush right"></div>
+
+        <div class="eyebrow left"></div>
+<div class="eyebrow right"></div>
+<div class="nose"></div>
+<div class="blush left"></div>
+<div class="blush right"></div>
+
       <div class="mouth"></div>
     </div>
     <div class="kurta-body">
@@ -397,6 +540,16 @@ animate();
     </div>
   </div>
 
+</div>
+<!-- SECRET GIFT -->
+<div id="gift">🎁</div>
+
+<div id="giftBox">
+  <div class="gift-content">
+    🎉 Amit Rana की ओर से  
+    <br>आपको नए साल का  
+    <br><b>SECRET GIFT</b> 🎉
+  </div>
 </div>
 
 </body>
