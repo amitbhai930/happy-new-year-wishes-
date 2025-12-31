@@ -5,8 +5,113 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>नव वर्ष 2026 शुभकामनाएँ</title>
 
-<style>  
-  /* DJ Equalizer */
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  height:100vh;
+  overflow:hidden;
+  font-family:"Noto Sans Devanagari",system-ui;
+  background:black;
+}
+
+/* Background Video */
+video{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:-3;
+}
+
+/* Overlay */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  z-index:-2;
+}
+
+/* Fireworks */
+canvas{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+}
+
+/* UI */
+.container{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:20px;
+  color:white;
+}
+
+h1{
+  font-size:2.2rem;
+  color:gold;
+  text-shadow:0 0 20px gold;
+}
+
+#shayari{
+  font-size:1.3rem;
+  line-height:1.9;
+  margin:20px 0;
+}
+
+button{
+  padding:14px 32px;
+  font-size:1.1rem;
+  border:none;
+  border-radius:40px;
+  font-weight:bold;
+  background:linear-gradient(45deg,#ffcc00,#ff0066);
+  color:black;
+}
+
+/* Lights */
+.light{
+  position:absolute;
+  width:220px;
+  height:220px;
+  border-radius:50%;
+  filter:blur(110px);
+  opacity:.9;
+}
+#l1{background:red;top:10%;left:10%}
+#l2{background:blue;bottom:20%;right:15%}
+#l3{background:green;top:30%;right:30%}
+
+/* Voice Wave */
+#voiceWave{
+  position:fixed;
+  bottom:150px;
+  left:50%;
+  transform:translateX(-50%);
+  display:none;
+  gap:6px;
+  z-index:8;
+}
+#voiceWave span{
+  width:6px;
+  height:20px;
+  background:linear-gradient(180deg,#ffcc00,#ff0066);
+  border-radius:4px;
+  animation:wave 1s infinite ease-in-out;
+}
+#voiceWave span:nth-child(1){animation-delay:0s}
+#voiceWave span:nth-child(2){animation-delay:.1s}
+#voiceWave span:nth-child(3){animation-delay:.2s}
+#voiceWave span:nth-child(4){animation-delay:.3s}
+#voiceWave span:nth-child(5){animation-delay:.4s}
+@keyframes wave{0%,100%{height:20px}50%{height:45px}}
+
+/* DJ */
 #dj{
   position:fixed;
   bottom:90px;
@@ -17,61 +122,14 @@
   align-items:flex-end;
   gap:6px;
   z-index:9;
-  pointer-events:none;
 }
-
 #dj .bar{
   width:10px;
-  height:10px;
   background:linear-gradient(180deg,#00ffcc,#ff00cc);
   border-radius:4px;
-  animation:djBeat 1s infinite ease-in-out;
 }
 
-#dj .bar:nth-child(1){animation-delay:0s}
-#dj .bar:nth-child(2){animation-delay:.1s}
-#dj .bar:nth-child(3){animation-delay:.2s}
-#dj .bar:nth-child(4){animation-delay:.3s}
-#dj .bar:nth-child(5){animation-delay:.2s}
-#dj .bar:nth-child(6){animation-delay:.1s}
-#dj .bar:nth-child(7){animation-delay:0s}
-
-@keyframes djBeat{
-  0%,100%{height:12px}
-  50%{height:55px}
-}
-
-  /* Voice Wave Animation */
-#voiceWave{
-  position:fixed;
-  bottom:150px;
-  left:50%;
-  transform:translateX(-50%);
-  display:none;
-  gap:6px;
-  z-index:8;
-}
-
-#voiceWave span{
-  width:6px;
-  height:20px;
-  background:linear-gradient(180deg,#ffcc00,#ff0066);
-  border-radius:4px;
-  animation:wave 1s infinite ease-in-out;
-}
-
-#voiceWave span:nth-child(1){animation-delay:0s}
-#voiceWave span:nth-child(2){animation-delay:.1s}
-#voiceWave span:nth-child(3){animation-delay:.2s}
-#voiceWave span:nth-child(4){animation-delay:.3s}
-#voiceWave span:nth-child(5){animation-delay:.4s}
-
-@keyframes wave{
-  0%,100%{height:20px}
-  50%{height:45px}
-}
-
-/* Gift Icon */
+/* Gift */
 #gift{
   position:fixed;
   top:20px;
@@ -81,13 +139,8 @@
   z-index:10;
   animation:pulse 2s infinite;
 }
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
 
-@keyframes pulse{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.2)}
-}
-
-/* Gift Popup */
 #giftBox{
   position:fixed;
   inset:0;
@@ -97,7 +150,6 @@
   align-items:center;
   z-index:20;
 }
-
 .gift-content{
   background:linear-gradient(135deg,#ffcc00,#ff0066);
   padding:30px;
@@ -106,618 +158,121 @@
   text-align:center;
   font-size:1.4rem;
   box-shadow:0 0 40px gold;
-  animation:pop 0.6s ease;
 }
-
-@keyframes pop{
-  0%{transform:scale(0)}
-  100%{transform:scale(1)}
-}
-
-    /* Human-like facial details */
-.eyebrow{
-  width:16px;
-  height:4px;
-  background:#5a3b1f;
-  position:absolute;
-  top:20px;
-  border-radius:5px;
-}
-.eyebrow.left{left:18px}
-.eyebrow.right{right:18px}
-
-.nose{
-  width:8px;
-  height:14px;
-  background:#e0a87c;
-  position:absolute;
-  top:42px;
-  left:50%;
-  transform:translateX(-50%);
-  border-radius:4px;
-}
-
-.blush{
-  width:14px;
-  height:8px;
-  background:rgba(255,120,120,0.5);
-  position:absolute;
-  top:48px;
-  border-radius:50%;
-}
-.blush.left{left:10px}
-.blush.right{right:10px}
-
-/* Softer skin tone */
-.cartoon .head{
-  background:linear-gradient(180deg,#ffd6b0,#ffbf91);
-}
-
-    /* MULTIPLE CARTOONS */
-.cartoon-wrap{
-  position:fixed;
-  bottom:20px;
-  left:0;
-  right:0;
-  display:flex;
-  justify-content:space-evenly;
-  z-index:6;
-  pointer-events:none;
-}
-
-.cartoon{
-  width:110px;
-  animation: idleFloat 3s ease-in-out infinite;
-}
-
-@keyframes idleFloat{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-10px)}
-}
-
-/* Head */
-.cartoon .head{
-  width:90px;
-  height:90px;
-  background:#ffcc99;
-  border-radius:50%;
-  margin:auto;
-  position:relative;
-}
-
-.eye{
-  width:10px;
-  height:10px;
-  background:#000;
-  border-radius:50%;
-  position:absolute;
-  top:30px;
-}
-.eye.left{left:22px}
-.eye.right{right:22px}
-
-.mouth{
-  width:26px;
-  height:8px;
-  background:#000;
-  border-radius:0 0 20px 20px;
-  position:absolute;
-  bottom:22px;
-  left:32px;
-}
-
-/* Kurta */
-.kurta-body{
-  width:80px;
-  height:90px;
-  background:linear-gradient(180deg,#ff9933,#ff6600);
-  margin:6px auto 0;
-  border-radius:10px;
-  position:relative;
-}
-
-.kurta-body::after{
-  content:"";
-  position:absolute;
-  top:0;
-  left:50%;
-  width:4px;
-  height:100%;
-  background:#fff;
-  transform:translateX(-50%);
-}
-
-/* Name Tag */
-.name-tag{
-  position:absolute;
-  bottom:8px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:10px;
-  color:#fff;
-  font-weight:bold;
-}
-
-/* Firework reaction */
-.jump{
-  animation: jump 0.6s ease;
-}
-
-@keyframes jump{
-  0%{transform:translateY(0)}
-  50%{transform:translateY(-25px)}
-  100%{transform:translateY(0)}
-}
-
-*{margin:0;padding:0;box-sizing:border-box}
-body{
-    height:100vh;
-    overflow:hidden;
-    font-family:"Noto Sans Devanagari",system-ui;
-    background:black;
-}
-
-/* Background Video */
-video{
-    position:fixed;
-    inset:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    z-index:-3;
-}
-
-/* Dark overlay */
-.overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.55);
-    z-index:-2;
-}
-
-/* Fireworks canvas */
-canvas{
-    position:fixed;
-    inset:0;
-    z-index:-1;
-}
-
-/* UI */
-.container{
-    position:absolute;
-    inset:0;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    padding:20px;
-    color:white;
-}
-
-h1{
-    font-size:2.2rem;
-    color:gold;
-    text-shadow:0 0 20px gold;
-}
-
-#shayari{
-    font-size:1.3rem;
-    line-height:1.9;
-    margin:20px 0;
-}
-
-/* Button */
-button{
-    padding:14px 32px;
-    font-size:1.1rem;
-    border:none;
-    border-radius:40px;
-    font-weight:bold;
-    background:linear-gradient(45deg,#ffcc00,#ff0066);
-    color:black;
-}
-
-/* Audio-reactive lights */
-.light{
-    position:absolute;
-    width:220px;
-    height:220px;
-    border-radius:50%;
-    filter:blur(110px);
-    opacity:.9;
-}
-#l1{background:red;top:10%;left:10%}
-#l2{background:blue;bottom:20%;right:15%}
-#l3{background:green;top:30%;right:30%}
 </style>
 </head>
 
 <body>
 
-<!-- Background Video -->
 <video src="video.mp4" autoplay muted loop playsinline></video>
 <div class="overlay"></div>
-
-<!-- Fireworks -->
 <canvas id="fw"></canvas>
 
-<!-- Lights -->
 <div class="light" id="l1"></div>
 <div class="light" id="l2"></div>
 <div class="light" id="l3"></div>
 
-<!-- UI -->
 <div class="container">
-    <h1>✨ नव वर्ष 2026 ✨</h1>
-    <div id="shayari">बटन दबाएँ और शुभकामनाएँ सुनें</div>
-    <button onclick="startShow()">🎆 शायरी सुनो</button>
+  <h1>✨ नव वर्ष 2026 ✨</h1>
+  <div id="shayari">बटन दबाएँ और शुभकामनाएँ सुनें</div>
+  <button onclick="startShow()">🎆 शायरी सुनो</button>
 </div>
 
-<!-- Audio -->
-<audio id="bgMusic" loop preload="auto">
-    <source src="music.mp3" type="audio/mpeg">
-</audio>
+<audio id="bgMusic" loop><source src="music.mp3"></audio>
+<audio id="cracker"><source src="cracker.wav"></audio>
 
-<audio id="cracker" preload="auto">
-    <source src="cracker.wav" type="audio/wav">
-</audio>
+<div id="gift">🎁</div>
+<div id="giftBox"><div class="gift-content">
+🎉 Amit ki ओर से<br>नए साल का<br><b>SECRET GIFT</b> 🎉
+</div></div>
 
-<script>  
-  /* DJ SOUND SYNC (SAFE ADDITION) */
+<div id="voiceWave"><span></span><span></span><span></span><span></span><span></span></div>
+
+<div id="dj">
+  <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+  <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+</div>
+
+<script>
+/* SHAYARI */
+const shayariList=[`नए साल की नई शुरुआत हो,\nहर दिन खुशियों की बरसात हो。\nAmit ki ओर से हार्दिक शुभकामनाएँ`,
+`हर सुबह उम्मीद जगाए,\nहर शाम सुकून लाए。\nAmit ki ओर से हार्दिक शुभकामनाएँ`];
+
+/* AUDIO */
+let audioCtx,analyser,dataArray;
 const djBars=document.querySelectorAll("#dj .bar");
-
-function djAnimate(bass){
-  djBars.forEach(bar=>{
-    const h = 12 + (bass/255)*45;
-    bar.style.height = h + "px";
-  });
-}
-
-  /* VOICE WAVE SYNC */
 const voiceWave=document.getElementById("voiceWave");
 
-const originalSpeak = speechSynthesis.speak.bind(speechSynthesis);
-
-speechSynthesis.speak = function(utterance){
-  if(voiceWave) voiceWave.style.display="flex";
-
-  utterance.onend = ()=>{
-    if(voiceWave) voiceWave.style.display="none";
-  };
-
-  originalSpeak(utterance);
+/* SPEAK (single safe override) */
+const _speak=speechSynthesis.speak.bind(speechSynthesis);
+speechSynthesis.speak=function(u){
+  voiceWave.style.display="flex";
+  u.onend=()=>voiceWave.style.display="none";
+  _speak(u);
 };
 
-    /* CARTOON FIREWORK REACTION */
-function cartoonCelebrate(){
-  document.querySelectorAll(".cartoon").forEach(c=>{
-    c.classList.remove("jump");
-    void c.offsetWidth; // reset animation
-    c.classList.add("jump");
-  });
-}
-
-/* HOOK INTO EXISTING FIREWORK SPAWN (NO CHANGE) */
-const originalSpawnFirework = window.spawnFirework;
-window.spawnFirework = function(){
-  if(originalSpawnFirework) originalSpawnFirework();
-  cartoonCelebrate();
-};
-
-/* LIP SYNC WITH SPEECH (SAFE ADDITION) */
-const originalSpeak = speechSynthesis.speak.bind(speechSynthesis);
-speechSynthesis.speak = function(utterance){
-  document.querySelectorAll(".mouth").forEach(m=>{
-    m.style.height="18px";
-  });
-  utterance.onend=()=>{
-    document.querySelectorAll(".mouth").forEach(m=>{
-      m.style.height="8px";
-    });
-  };
-  originalSpeak(utterance);
-};
-
-/* ---------------- SHAYARI ---------------- */
-const shayariList = [
-`नए साल की नई शुरुआत हो,
-हर दिन खुशियों की बरसात हो।
-Amit ki ओर से हार्दिक शुभकामनाएँ`,
-
-`बीते कल को दिल से भुलाकर,
-नए सपनों को आज अपनाकर।
-Amit ki ओर से हार्दिक शुभकामनाएँ`,
-
-`हर सुबह उम्मीद जगाए,
-हर शाम सुकून लाए।
-Amit ki ओर से हार्दिक शुभकामनाएँ`,
-
-`जीवन में न हो कोई ग़म,
-हर पल खुशियों से हो भरम।
-Amit ki ओर से हार्दिक शुभकामनाएँ`,
-
-`नए साल में नई पहचान बने,
-हर ख्वाब सच होकर सजे।
-Amit ki ओर से हार्दिक शुभकामनाएँ`,
-
-`जो चाहो वो मुकाम मिले,
-हर कदम पर सफलता खिले।
-Amit ki ओर से हार्दिक शुभकामनाएँ`,
-
-`हंसी से सजी हो ज़िंदगी,
-खुशियों से भरी हर बंदगी।
-Amit ki ओर से हार्दिक शुभकामनाएँ`,
-
-`हर मुश्किल आसान हो जाए,
-हर अंधेरा रोशनी पाए।
-Amit ki ओर से हार्दिक शुभकामनाएँ`,
-
-`नए साल का ये पैग़ाम है,
-खुश रहना ही सबसे बड़ा इनाम है।
-Amit ki ओर से हार्दिक शुभकामनाएँ`,
-
-`हर दिन कुछ नया सिखाए,
-हर पल आगे बढ़ाए।
-Amit ki ओर से हार्दिक शुभकामनाएँ`,
-
-`दिल में रहे सच्चा विश्वास,
-जीवन बने खुशियों का अहसास।
-Amit ki ओर से हार्दिक शुभकामनाएँ`,
-
-`न हो कोई अधूरी कहानी,
-हर सुबह हो नई रवानी।
-Amit ki ओर से हार्दिक शुभकामनाएँ`,
-
-`सपनों को हकीकत बनाओ,
-नए साल में खुद को पहचानो।
-Amit ki ओर से हार्दिक शुभकामनाएँ`,
-
-`हर रिश्ते में प्यार बढ़े,
-हर दिल में सुकून चढ़े।
-Amit ki ओर से हार्दिक शुभकामनाएँ`,
-
-`नई सोच, नया उजाला,
-2026 बने खुशियों वाला।
-Amit ki ओर से हार्दिक शुभकामनाएँ`,
-
-`हर दिन हो सफलता का सवेरा,
-हर रात हो चैन का बसेरा।
-Amit ki ओर से हार्दिक शुभकामनाएँ`,
-
-`जो खोया वो सबक बन जाए,
-जो पाया वो मुस्कान लाए।
-Amit ki ओर से हार्दिक शुभकामनाएँ`,
-
-`नए साल की यही है दुआ,
-हर सपना हो पूरा हुआ।
-Amit ki ओर से हार्दिक शुभकामनाएँ`,
-
-`जीवन में हो तरक्की अपार,
-हर दिन मिले नया उपहार।
-Amit ki ओर से हार्दिक शुभकामनाएँ`,
-
-`नव वर्ष लाए खुशियों की सौगात,
-हर पल हो खास, हर बात में बात।
-Amit ki ओर से हार्दिक शुभकामनाएँ`
-];
-
-
-/* ---------------- AUDIO ---------------- */
-let audioCtx, analyser, dataArray;
-
-/* ---------------- START ---------------- */
 function startShow(){
-    const text=shayariList[Math.floor(Math.random()*shayariList.length)];
-    document.getElementById("shayari").innerText=text;
+  const text=shayariList[Math.floor(Math.random()*shayariList.length)];
+  shayari.innerText=text;
 
-    // Voice
-    speechSynthesis.cancel();
-    const speech=new SpeechSynthesisUtterance(text);
-    speech.lang="hi-IN";
-    speech.rate=.9;
-    speech.volume=1;
-    speechSynthesis.speak(speech);
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="hi-IN"; speechSynthesis.speak(u);
 
-    // Music
-    const music=document.getElementById("bgMusic");
-    music.volume=.35;
-    music.play();
+  bgMusic.volume=.35; bgMusic.play();
 
-    // Web Audio API
-    audioCtx=new (window.AudioContext||window.webkitAudioContext)();
-    const source=audioCtx.createMediaElementSource(music);
-    analyser=audioCtx.createAnalyser();
-    analyser.fftSize=512;
-    dataArray=new Uint8Array(analyser.frequencyBinCount);
-    source.connect(analyser);
-    analyser.connect(audioCtx.destination);
-
-    audioReactive();
+  audioCtx=new AudioContext();
+  const src=audioCtx.createMediaElementSource(bgMusic);
+  analyser=audioCtx.createAnalyser();
+  analyser.fftSize=512;
+  dataArray=new Uint8Array(analyser.frequencyBinCount);
+  src.connect(analyser); analyser.connect(audioCtx.destination);
+  audioReactive();
 }
 
-/* ---------------- BASS-ONLY DETECTION ---------------- */
 function audioReactive(){
-    analyser.getByteFrequencyData(dataArray);
+  analyser.getByteFrequencyData(dataArray);
+  const bass=dataArray.slice(0,50).reduce((a,b)=>a+b)/50;
 
-    const bassBins=dataArray.slice(0, dataArray.length*0.1);
-    const bass=bassBins.reduce((a,b)=>a+b,0)/bassBins.length;
+  l1.style.transform=`scale(${1+bass/180})`;
+  l2.style.transform=`scale(${1+bass/160})`;
+  l3.style.transform=`scale(${1+bass/200})`;
 
-    // Lights react only to bass
-    l1.style.transform=`scale(${1+bass/180})`;
-    l2.style.transform=`scale(${1+bass/160})`;
-    l3.style.transform=`scale(${1+bass/200})`;
+  djBars.forEach(b=>b.style.height=(12+(bass/255)*45)+"px");
 
-    // Firecracker + fireworks on strong bass hit
-    if(bass>160){
-        const c=document.getElementById("cracker");
-        c.currentTime=0;
-        c.volume=1;
-        c.play();
-        spawnFirework();
-    }
-
-    requestAnimationFrame(audioReactive);
+  if(bass>160){cracker.currentTime=0;cracker.play();spawnFirework();}
+  requestAnimationFrame(audioReactive);
 }
 
-/* ---------------- FIREWORKS ---------------- */
-const canvas=document.getElementById("fw");
-const ctx=canvas.getContext("2d");
+/* FIREWORKS */
+const ctx=fw.getContext("2d");
 resize();window.onresize=resize;
-function resize(){canvas.width=innerWidth;canvas.height=innerHeight}
-
+function resize(){fw.width=innerWidth;fw.height=innerHeight}
 let particles=[];
 function spawnFirework(){
-    for(let i=0;i<45;i++){
-        particles.push({
-            x:Math.random()*canvas.width,
-            y:canvas.height*0.45,
-            vx:(Math.random()-.5)*7,
-            vy:(Math.random()-.8)*7,
-            life:70,
-            col:`hsl(${Math.random()*360},100%,60%)`
-        });
-    }
+  for(let i=0;i<40;i++)particles.push({
+    x:Math.random()*fw.width,y:fw.height*.5,
+    vx:(Math.random()-.5)*6,vy:(Math.random()-.8)*6,
+    life:60,col:`hsl(${Math.random()*360},100%,60%)`
+  });
 }
+(function animate(){
+  ctx.clearRect(0,0,fw.width,fw.height);
+  particles.forEach(p=>{
+    ctx.fillStyle=p.col;ctx.fillRect(p.x,p.y,3,3);
+    p.x+=p.vx;p.y+=p.vy;p.vy+=.1;p.life--;
+  });
+  particles=particles.filter(p=>p.life>0);
+  requestAnimationFrame(animate);
+})();
 
-function animate(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    particles.forEach(p=>{
-        ctx.fillStyle=p.col;
-        ctx.fillRect(p.x,p.y,3,3);
-        p.x+=p.vx;
-        p.y+=p.vy;
-        p.vy+=.09;
-        p.life--;
-    });
-    particles=particles.filter(p=>p.life>0);
-    requestAnimationFrame(animate);
-}
-animate(); 
-    /* SECRET GIFT LOGIC */
-const gift=document.getElementById("gift");
-const giftBox=document.getElementById("giftBox");
-
-let pressTimer;
-
-gift.addEventListener("mousedown",()=>{
-  pressTimer=setTimeout(openGift,800);
-});
-
-gift.addEventListener("mouseup",()=>clearTimeout(pressTimer));
-gift.addEventListener("mouseleave",()=>clearTimeout(pressTimer));
-
-gift.addEventListener("touchstart",()=>{
-  pressTimer=setTimeout(openGift,800);
-});
-
-gift.addEventListener("touchend",()=>clearTimeout(pressTimer));
-
-function openGift(){
+/* GIFT */
+gift.onclick=()=>{
   giftBox.style.display="flex";
-
-  // Firecracker + fireworks + cartoon jump
   spawnFirework();
-  cartoonCelebrate();
-
-  // Optional voice message
-  const msg=new SpeechSynthesisUtterance(
-    "Amit Rana की ओर से आपको नए साल का सरप्राइज़ गिफ्ट।"
-  );
-  msg.lang="hi-IN";
-  speechSynthesis.speak(msg);
-}
-
-giftBox.addEventListener("click",()=>{
-  giftBox.style.display="none";
-});
-
+  speechSynthesis.speak(new SpeechSynthesisUtterance("Amit ki ओर से नए साल का सरप्राइज़"));
+};
+giftBox.onclick=()=>giftBox.style.display="none";
 </script>
-<!-- MULTIPLE CARTOON CHARACTERS -->
-<div class="cartoon-wrap">
-
-  <div class="cartoon kurta" id="cartoon1">
-    <div class="head">
-      <div class="eye left"></div>
-      <div class="eye right"></div>
-        <div class="eyebrow left"></div>
-<div class="eyebrow right"></div>
-<div class="nose"></div>
-<div class="blush left"></div>
-<div class="blush right"></div>
-
-      <div class="mouth"></div>
-    </div>
-    <div class="kurta-body">
-      <span class="name-tag">Amit Rana</span>
-    </div>
-  </div>
-
-  <div class="cartoon kurta" id="cartoon2">
-    <div class="head">
-      <div class="eye left"></div>
-      <div class="eye right"></div>
-        <div class="eyebrow left"></div>
-<div class="eyebrow right"></div>
-<div class="nose"></div>
-<div class="blush left"></div>
-<div class="blush right"></div>
-
-      <div class="mouth"></div>
-    </div>
-    <div class="kurta-body">
-      <span class="name-tag">Amit Rana</span>
-    </div>
-  </div>
-
-  <div class="cartoon kurta" id="cartoon3">
-    <div class="head">
-      <div class="eye left"></div>
-      <div class="eye right"></div>
-        <div class="eyebrow left"></div>
-<div class="eyebrow right"></div>
-<div class="nose"></div>
-<div class="blush left"></div>
-<div class="blush right"></div>
-
-        <div class="eyebrow left"></div>
-<div class="eyebrow right"></div>
-<div class="nose"></div>
-<div class="blush left"></div>
-<div class="blush right"></div>
-
-      <div class="mouth"></div>
-    </div>
-    <div class="kurta-body">
-      <span class="name-tag">Amit Rana</span>
-    </div>
-  </div>
-
-</div>
-<!-- SECRET GIFT -->
-<div id="gift">🎁</div>
-
-<div id="giftBox">
-  <div class="gift-content">
-    🎉 Amit Rana की ओर से  
-    <br>आपको नए साल का  
-    <br><b>SECRET GIFT</b> 🎉
-  </div>
-</div>
-<!-- VOICE WAVE -->
-<div id="voiceWave">
-  <span></span><span></span><span></span><span></span><span></span>
-</div>
-<!-- DJ SOUND ANIMATION -->
-<div id="dj">
-  <div class="bar"></div>
-  <div class="bar"></div>
-  <div class="bar"></div>
-  <div class="bar"></div>
-  <div class="bar"></div>
-  <div class="bar"></div>
-  <div class="bar"></div>
-</div>
 
 </body>
 </html>
