@@ -539,7 +539,6 @@ function startShow(){
 /* ---------------- BASS-ONLY DETECTION ---------------- */
 function audioReactive(){
     analyser.getByteFrequencyData(dataArray);
-djAnimate(bass);
 
     const bassBins=dataArray.slice(0, dataArray.length*0.1);
     const bass=bassBins.reduce((a,b)=>a+b,0)/bassBins.length;
